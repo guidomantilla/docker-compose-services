@@ -1,0 +1,41 @@
+services:
+  openfga-migrate:
+    container_name: openfga-migrate
+    image: openfga/openfga:latest
+    platform: linux/arm64
+    restart: no
+    command: migrate
+    environment:
+      OPENFGA_DATASTORE_ENGINE: "sqlite"
+      OPENFGA_DATASTORE_URI: "file:/home/nonroot/openfga.db"
+    volumes:
+      - "${OPENFGA_VOLUME_DIR:-./volume}:/home/nonroot"
+    networks:
+      - openfga-network
+
+  openfga-server:
+    container_name: openfga-server
+    image: openfga/openfga:latest
+    platform: linux/arm64
+    restart: no
+    depends_on:
+      openfga-migrate:
+        condition: service_completed_successfully
+    command: run
+    ports:
+      - "8280:8080"
+      - "8281:8081"
+      - "3200:3000"
+    environment:
+      OPENFGA_DATASTORE_ENGINE: "sqlite"
+      OPENFGA_DATASTORE_URI: "file:/home/nonroot/openfga.db"
+      OPENFGA_LOG_FORMAT: "json"
+    volumes:
+      - "${OPENFGA_VOLUME_DIR:-./volume}:/home/nonroot"
+    networks:
+      - openfga-network
+
+networks:
+  openfga-network:
+    name: openfga-network
+    driver: bridge

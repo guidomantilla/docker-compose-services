@@ -1,0 +1,20 @@
+services:
+  superset-server:
+    container_name: superset-server
+    image: apache/superset:latest
+    platform: linux/arm64
+    restart: no
+    ports:
+      - "8088:8088"
+    environment:
+      SUPERSET_SECRET_KEY: "${SUPERSET_SECRET_KEY}"
+      TALISMAN_ENABLED: "False"
+    volumes:
+      - "${SUPERSET_VOLUME_DIR:-./volume}:/app/superset_home"
+    networks:
+      - superset-network
+
+networks:
+  superset-network:
+    name: superset-network
+    driver: bridge

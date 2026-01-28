@@ -1,0 +1,22 @@
+services:
+  versitygw-server:
+    container_name: versitygw-server
+    image: versity/versitygw:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "7070:7070"
+      - "7071:7071"
+    environment:
+      ROOT_ACCESS_KEY: "${VERSITYGW_ACCESS_KEY}"
+      ROOT_SECRET_KEY: "${VERSITYGW_SECRET_KEY}"
+    command: posix /data --port :7070 --webui :7071
+    volumes:
+      - "${VERSITYGW_VOLUME_DIR:-./volume}/data:/data"
+    networks:
+      - versitygw-network
+
+networks:
+  versitygw-network:
+    name: versitygw-network
+    driver: bridge

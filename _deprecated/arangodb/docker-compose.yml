@@ -1,0 +1,7 @@
+services:
+  arangodb:
+    image: arangodb/enterprise:3.12.7.1
+    environment:
+      ARANGO_ROOT_PASSWORD: "test"
+    ports:
+      - "8529:8529"

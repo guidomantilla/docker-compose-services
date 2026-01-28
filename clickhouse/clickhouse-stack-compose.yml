@@ -1,0 +1,25 @@
+services:
+  clickhouse-server:
+    container_name: clickhouse-server
+    image: clickhouse/clickhouse-server:latest
+    platform: linux/arm64
+    restart: no
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      CLICKHOUSE_PASSWORD: "${CLICKHOUSE_PASSWORD}"
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - "${CLICKHOUSE_VOLUME_DIR:-./volume}/data:/var/lib/clickhouse"
+      - "${CLICKHOUSE_VOLUME_DIR:-./volume}/logs:/var/log/clickhouse-server"
+    networks:
+      - clickhouse-network
+
+networks:
+  clickhouse-network:
+    name: clickhouse-network
+    driver: bridge

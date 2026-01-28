@@ -1,0 +1,16 @@
+services:
+  mailhog-server:
+    container_name: mailhog-server
+    image: mailhog/mailhog:latest
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - mailhog-network
+
+networks:
+  mailhog-network:
+    name: mailhog-network
+    driver: bridge

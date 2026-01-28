@@ -1,0 +1,20 @@
+services:
+  timescaledb-server:
+    container_name: timescaledb-server
+    image: timescale/timescaledb-ha:pg17
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "${TIMESCALEDB_PASSWORD}"
+    volumes:
+      - "${TIMESCALEDB_VOLUME_DIR:-./volume}/data:/var/lib/postgresql"
+      - "${TIMESCALEDB_HOME:-.}/extension.sql:/docker-entrypoint-initdb.d/extension.sql"
+    networks:
+      - timescaledb-network
+
+networks:
+  timescaledb-network:
+    name: timescaledb-network
+    driver: bridge

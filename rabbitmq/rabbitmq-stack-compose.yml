@@ -1,0 +1,21 @@
+services:
+  rabbitmq-server:
+    container_name: rabbitmq-server
+    image: rabbitmq:management
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
+    volumes:
+      - "${RABBITMQ_VOLUME_DIR:-./volume}/data:/var/lib/rabbitmq"
+    networks:
+      - rabbitmq-network
+
+networks:
+  rabbitmq-network:
+    name: rabbitmq-network
+    driver: bridge

@@ -1,0 +1,17 @@
+services:
+  cockroach:
+    image: cockroachdb/cockroach:v25.4.2
+    container_name: roach-single
+    hostname: roach-single
+    command: >
+      start-single-node
+      --http-addr=roach-single:8080
+    environment:
+      COCKROACH_DATABASE: ${DATABASE_NAME}
+      COCKROACH_USER: ${USER_NAME}
+      COCKROACH_PASSWORD: ${PASSWORD}
+    ports:
+      - "26257:26257"   # SQL
+      - "8080:8080"     # Admin UI
+    volumes:
+      - roach-single:/cockroach/cockroach-data

@@ -1,0 +1,52 @@
+// ============================================
+// Grafana Alloy — secondary collector
+// Same integrations as OTEL Collector but on
+// different ports to avoid conflicts.
+// ============================================
+
+// --- OTLP Receiver (remapped ports) ---
+otelcol.receiver.otlp "default" {
+  grpc {
+    endpoint = "0.0.0.0:4317"
+  }
+  http {
+    endpoint = "0.0.0.0:4318"
+  }
+  output {
+    metrics = [otelcol.exporter.prometheus.default.input]
+    logs    = [otelcol.exporter.loki.default.input]
+    traces  = [otelcol.exporter.otlp.jaeger.input]
+  }
+}
+
+// --- Export metrics to Prometheus ---
+otelcol.exporter.prometheus "default" {
+  forward_to = [prometheus.remote_write.default.receiver]
+}
+
+prometheus.remote_write "default" {
+  endpoint {
+    url = "http://telemetry-prometheus:9090/api/v1/write"
+  }
+}
+
+// --- Export logs to Loki ---
+otelcol.exporter.loki "default" {
+  forward_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
+  endpoint {
+    url = "http://telemetry-loki:3100/loki/api/v1/push"
+  }
+}
+
+// --- Export traces to Jaeger ---
+otelcol.exporter.otlp "jaeger" {
+  client {
+    endpoint = "telemetry-jaeger:4317"
+    tls {
+      insecure = true
+    }
+  }
+}
