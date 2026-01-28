@@ -1,0 +1,47 @@
+# ===========================================
+# Environment files with secrets
+# ===========================================
+.envrc
+**/.envrc
+
+# ===========================================
+# Volume directories (database data, logs, certs)
+# ===========================================
+**/volume/*
+!**/volume/.gitkeep
+!redis/volume/redis-*
+
+# ===========================================
+# Telemetry otel-data (keep structure, ignore content)
+# ===========================================
+telemetry/otel-data/*
+!telemetry/otel-data/.gitkeep
+
+# ===========================================
+# OS and IDE files
+# ===========================================
+.DS_Store
+**/.DS_Store
+.idea/
+**/.idea/
+*.swp
+*.swo
+*~
+
+# ===========================================
+# Docker runtime
+# ===========================================
+*.log
+*.pid
+
+# ===========================================
+# Specific data directories
+# ===========================================
+**/data/
+!**/dynamicconfig/
+
+# ===========================================
+# Deprecated project specific ignores
+# ===========================================
+_deprecated/porchpass/firebase-emulator/cache
+_deprecated/porchpass/.pg

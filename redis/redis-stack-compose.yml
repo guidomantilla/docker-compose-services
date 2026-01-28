@@ -1,0 +1,22 @@
+services:
+  redis-server:
+    container_name: redis-server
+    image: redis/redis-stack:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    environment:
+      REDIS_ARGS: "--requirepass ${REDIS_PASSWORD} --save 60 1000 --appendonly yes"
+      REDISTIMESERIES_ARGS: "RETENTION_POLICY=20"
+    volumes:
+      - "${REDIS_VOLUME_DIR:-./volume}/data:/data"
+      - "${REDIS_VOLUME_DIR:-./volume}/redis-stack.conf:/redis-stack.conf"
+    networks:
+      - redis-network
+
+networks:
+  redis-network:
+    name: redis-network
+    driver: bridge

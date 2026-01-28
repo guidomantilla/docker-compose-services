@@ -1,0 +1,7 @@
+source_up
+
+export KEYCLOAK_ADMIN_USERNAME="root"
+export KEYCLOAK_ADMIN_PASSWORD=""  # Set your password
+export KEYCLOAK_VOLUME_DIR="$SERVICES_HOME/keycloak/volume"
+
+export OPENFGA_VOLUME_DIR="$SERVICES_HOME/openfga/volume"

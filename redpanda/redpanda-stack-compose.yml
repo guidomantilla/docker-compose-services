@@ -1,0 +1,73 @@
+services:
+  redpanda-broker:
+    container_name: redpanda-broker
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "18081:18081"
+      - "18082:18082"
+      - "19092:19092"
+      - "19644:9644"
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      # Address the broker advertises to clients that connect to the Kafka API.
+      # Use the internal addresses to connect to the Redpanda brokers'
+      # from inside the same Docker network.
+      # Use the external addresses to connect to the Redpanda brokers'
+      # from outside the Docker network.
+      - --advertise-kafka-addr internal://redpanda-broker:9092,external://localhost:19092
+      - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
+      # Address the broker advertises to clients that connect to the HTTP Proxy.
+      - --advertise-pandaproxy-addr internal://redpanda-broker:8082,external://localhost:18082
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      # Redpanda brokers use the RPC API to communicate with each other internally.
+      - --rpc-addr redpanda-broker:33145
+      - --advertise-rpc-addr redpanda-broker:33145
+      # Mode dev-container uses well-known configuration properties for development in containers.
+      - --mode dev-container
+      # Tells Seastar (the framework Redpanda uses under the hood) to use 1 core on the system.
+      - --smp 1
+      - --default-log-level=info
+    volumes:
+      - redpanda-broker_data:/var/lib/redpanda/data
+    networks:
+      - redpanda-network
+
+  redpanda-console:
+    container_name: redpanda-console
+    image: docker.redpanda.com/redpandadata/console:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    depends_on:
+      - redpanda-broker
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda-broker:9092"]
+        schemaRegistry:
+          enabled: true
+          urls: ["http://redpanda-broker:8081"]
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://redpanda-broker:9644"]
+    ports:
+      - "18080:8080"
+
+    networks:
+      - redpanda-network
+
+volumes:
+  redpanda-broker_data:
+    name: redpanda-broker_data
+
+networks:
+  redpanda-network:
+    name: redpanda-network
+    driver: bridge

@@ -1,0 +1,20 @@
+services:
+  temporal-dev-server:
+    container_name: temporal-dev-server
+    image: temporalio/temporal:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "17233:7233"
+      - "18233:8233"
+    command: server start-dev --ip 0.0.0.0 --log-level info --db-filename temporal.db
+    volumes:
+      - "${TEMPORAL_VOLUME_DIR:-./volume}:/temporal"
+    working_dir: /temporal
+    networks:
+      - temporal-dev-network
+
+networks:
+  temporal-dev-network:
+    name: temporal-dev-network
+    driver: bridge

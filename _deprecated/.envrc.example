@@ -1,0 +1,16 @@
+source_up
+
+export _AIRFLOW_WWW_USER_USERNAME="root"
+export _AIRFLOW_WWW_USER_PASSWORD=""  # Set your password
+export AIRFLOW_PROJ_DIR="$SERVICES_HOME/airflow/volume"
+
+export METABASE_VOLUME_DIR="$SERVICES_HOME/metabase/volume"
+
+export MINIO_ROOT_USER="root"
+export MINIO_ROOT_PASSWORD=""  # Set your password
+export MINIO_VOLUME_DIR="$SERVICES_HOME/minio/volume"
+
+export N8N_BASIC_AUTH_USER="root"
+export N8N_BASIC_AUTH_PASSWORD=""  # Set your password
+export N8N_ENCRYPTION_KEY=""  # Set your encryption key
+export N8N_VOLUME_DIR="$SERVICES_HOME/n8n/volume"

@@ -1,0 +1,27 @@
+services:
+  oracle-23ai-server:
+    container_name: oracle-23ai-server
+    image: gvenzl/oracle-free:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: "${ORACLE_SYSTEM_PASSWORD}"
+    volumes:
+      - "${ORACLE_VOLUME_DIR}/oradata:/opt/oracle/oradata"
+      - "${ORACLE_VOLUME_DIR}/oraInventory:/opt/oracle/oraInventory"
+      #- "${ORACLE_VOLUME_DIR}/product:/opt/oracle/product"
+      - "${ORACLE_VOLUME_DIR}/diag:/opt/oracle/diag"
+      - "${ORACLE_VOLUME_DIR}/audit:/opt/oracle/audit"
+      - "${ORACLE_VOLUME_DIR}/admin:/opt/oracle/admin"
+      - "${ORACLE_VOLUME_DIR}/backup:/opt/oracle/backup"
+      - "${ORACLE_VOLUME_DIR}/init.d:/etc/init.d"
+      - "${ORACLE_VOLUME_DIR}/sysconfig:/etc/sysconfig"
+    networks:
+      - oracle-23ai-network
+
+networks:
+   oracle-23ai-network:
+    name:  oracle-23ai-network
+    driver: bridge

@@ -1,0 +1,61 @@
+services:
+  telemetry-otel-collector:
+    container_name: telemetry-otel-collector
+    image: otel/opentelemetry-collector:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "1888:1888"   # pprof extension
+      - "8888:8888"   # Prometheus metrics exposed by the Collector
+      - "8889:8889"   # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP http receiver
+      - "55679:55679" # zpages extension
+    volumes:
+      - "${TELEMETRY_VOLUME_DIR}/otel-collector-config.yaml:/etc/otelcol/config.yaml"
+      - "${TELEMETRY_VOLUME_DIR}/otel-data:/otel-data"
+      - telemetry-otel-collector-server_temp:/tmp
+    networks:
+      - telemetry-network
+
+  telemetry-jaeger:
+    container_name: telemetry-jaeger
+    image: jaegertracing/all-in-one:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "16686:16686"  # UI
+      - "14250:14250"  # gRPC (collector -> jaeger)
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    volumes:
+      - telemetry-jaeger_temp:/tmp
+    networks:
+      - telemetry-network
+
+  telemetry-prometheus:
+    container_name: telemetry-prometheus
+    image: prom/prometheus:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - "${TELEMETRY_VOLUME_DIR}/prometheus-config.yaml:/etc/prometheus/prometheus.yml"
+      - telemetry-prometheus_prometheus:/prometheus
+    networks:
+      - telemetry-network
+
+volumes:
+  telemetry-otel-collector-server_temp:
+    name: telemetry-otel-collector-server_temp
+  telemetry-jaeger_temp:
+    name: telemetry-jaeger_temp
+  telemetry-prometheus_prometheus:
+    name: telemetry-prometheus_prometheus
+
+networks:
+  telemetry-network:
+    name: telemetry-network
+    driver: bridge

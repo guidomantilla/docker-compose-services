@@ -1,0 +1,21 @@
+services:
+  mongo-server:
+    container_name: mongo-server
+    image: mongo:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}"
+    volumes:
+      - "${MONGO_VOLUME_DIR}/db:/data/db"
+      - "${MONGO_VOLUME_DIR}/configdb:/data/configdb"
+    networks:
+      - mongo-network
+
+networks:
+  mongo-network:
+    name: mongo-network
+    driver: bridge

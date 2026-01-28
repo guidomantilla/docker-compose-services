@@ -1,0 +1,26 @@
+services:
+  localstack-pro-server:
+    container_name: localstack-pro-server
+    image: localstack/localstack-pro:latest  # required for Pro
+    platform: linux/arm64
+    restart: no
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+      - "127.0.0.1:9443:443"              # LocalStack HTTPS Gateway (Pro)
+    environment:
+      # Activate LocalStack Pro: https://docs.localstack.cloud/getting-started/auth-token/
+      LOCALSTACK_AUTH_TOKEN: ${LOCALSTACK_AUTH_TOKEN:?}  # required for Pro
+      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+      DEBUG: ${DEBUG:-0}
+      PERSISTENCE: ${PERSISTENCE:-0}
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      -  localstack-pro-network
+
+networks:
+   localstack-pro-network:
+    name: localstack-pro-network
+    driver: bridge

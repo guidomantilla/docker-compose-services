@@ -1,0 +1,20 @@
+services:
+  sqlserver-2022-server:
+    container_name: sqlserver-2022-server
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SQLSERVER_SA_PASSWORD}"
+    volumes:
+      - "${SQLSERVER_VOLUME_DIR:-./volume}:/var/opt/mssql"
+    networks:
+      - sqlserver-2022-network
+
+networks:
+   sqlserver-2022-network:
+    name:  sqlserver-2022-network
+    driver: bridge

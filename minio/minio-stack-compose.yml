@@ -1,0 +1,22 @@
+services:
+  minio-server:
+    container_name: minio-server-server
+    image: minio/minio:latest
+    platform: linux/arm64
+    restart: no
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    command: server /data --console-address ":9001"
+    volumes:
+      - "${MINIO_VOLUME_DIR:-./volume}:/data"
+    networks:
+      -  minio-network
+
+networks:
+   minio-network:
+    name: minio-network
+    driver: bridge

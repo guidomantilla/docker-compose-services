@@ -1,0 +1,20 @@
+services:
+  postgres-server:
+    container_name: postgres-server
+    image: postgres:latest
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - "${POSTGRES_VOLUME_DIR}/data:/var/lib/postgresql/data"
+      - "./init/extension.sql:/docker-entrypoint-initdb.d/extension.sql"
+    networks:
+      -  postgres-network
+
+networks:
+  postgres-network:
+    name: postgres-network
+    driver: bridge
