@@ -41,6 +41,11 @@ telemetry/otel-data/*
 !**/dynamicconfig/
 
 # ===========================================
+# Excluded projects
+# ===========================================
+yumbrands/
+
+# ===========================================
 # Deprecated project specific ignores
 # ===========================================
 _deprecated/porchpass/firebase-emulator/cache
