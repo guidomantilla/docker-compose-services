@@ -27,4 +27,4 @@ kafka-zookeeper
 
 ## Nota
 
-Conflicta con yumbrands (mismos container names y puertos). No pueden correr simultaneamente.
+Conflicta con redpanda (mismos puertos). No pueden correr simultaneamente.

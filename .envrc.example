@@ -127,8 +127,3 @@ alias  TEMPORAL_STACK_UP="docker compose -f $SERVICES_HOME/temporal/temporal-dev
 alias  TEMPORAL_STACK_STOP="docker compose -f $SERVICES_HOME/temporal/temporal-dev-stack-compose.yml -p temporal-dev-stack stop"
 alias  TEMPORAL_STACK_DOWN="docker compose -f $SERVICES_HOME/temporal/temporal-dev-stack-compose.yml -p temporal-dev-stack down"
 export TEMPORAL_VOLUME_DIR="$SERVICES_HOME/temporal/volume"
-
-# ------------- YUMBRANDS ------------- #
-alias  YUMBRANDS_STACK_UP="docker compose -f $SERVICES_HOME/yumbrands/yumbrands-stack-compose.yml -p yumbrands-stack up --detach --remove-orphans"
-alias  YUMBRANDS_STACK_STOP="docker compose -f $SERVICES_HOME/yumbrands/yumbrands-stack-compose.yml -p yumbrands-stack stop"
-alias  YUMBRANDS_STACK_DOWN="docker compose -f $SERVICES_HOME/yumbrands/yumbrands-stack-compose.yml -p yumbrands-stack down"

@@ -1,6 +1,6 @@
 # Docker Compose Standards & Analysis
 
-> Analysis of the 18 active service stacks in this repository.
+> Analysis of the 17 active service stacks in this repository.
 > Use this document as reference for standardization work on a case-by-case basis.
 
 ---
@@ -37,13 +37,12 @@
 | 15 | `sql-server-2022/` | `sql-server-2022-stack-compose.yml` | Single | sqlserver-2022-server |
 | 16 | `telemetry/` | `telemetry-stack-compose.yml` | Multi-service | telemetry-otel-collector, telemetry-jaeger, telemetry-prometheus, telemetry-loki, telemetry-grafana, telemetry-alloy |
 | 17 | `temporal/` | `temporal-dev-stack-compose.yml` | Single | temporal-dev-server |
-| 18 | `yumbrands/` | `yumbrands-stack-compose.yml` | Multi-service | 11 services (postgres, kafka, temporal, etc.) |
 
 ---
 
 ## 2. Current Pattern Analysis
 
-### 2.1 What IS Already Consistent (18/18 stacks)
+### 2.1 What IS Already Consistent (17/17 stacks)
 
 | Aspect | Pattern |
 |--------|---------|
@@ -58,13 +57,13 @@
 
 | Aspect | Dominant Pattern | Adoption |
 |--------|-----------------|----------|
-| `restart:` | `unless-stopped` | 18/18 (openfga-migrate uses `no` — one-shot task) |
-| `platform:` | `linux/arm64` | 15/18 (sql-server, yumbrands: amd64; mailhog: amd64) |
-| Environment vars | Map format, shell substitution from `.envrc` (`"${VAR}"`) for credentials | 17/18 (yumbrands exception) |
-| Volumes | Bind mounts with `${SERVICE_VOLUME_DIR}/path:/container/path` | 13/18 |
-| Image tags | `:latest` | 15/18 (sql-server uses `2022-latest`, yumbrands uses pinned versions, rabbitmq uses `management`) |
+| `restart:` | `unless-stopped` | 17/17 (openfga-migrate uses `no` — one-shot task) |
+| `platform:` | `linux/arm64` | 15/17 (sql-server: amd64; mailhog: amd64) |
+| Environment vars | Map format, shell substitution from `.envrc` (`"${VAR}"`) for credentials | 17/17 |
+| Volumes | Bind mounts with `${SERVICE_VOLUME_DIR}/path:/container/path` | 13/17 |
+| Image tags | `:latest` | 15/17 (sql-server uses `2022-latest`, rabbitmq uses `management`) |
 
-### 2.3 What Is NOT Present (0/18 stacks) — Out of Scope
+### 2.3 What Is NOT Present (0/17 stacks) — Out of Scope
 
 The following features are absent across all stacks. They are **out of scope** for this standardization effort — this is a local development environment, not production infrastructure.
 
@@ -87,7 +86,6 @@ The following features are absent across all stacks. They are **out of scope** f
 - **Map format** (`KEY: "value"`) across all stacks.
 - **Shell substitution** (`"${VAR}"`) for credentials — externalized to `.envrc`.
 - **Hardcoded values** only for non-secret service configuration.
-- **Exception:** yumbrands retains hardcoded credentials — it is a project-specific stack, not a reusable service.
 
 ### 3.3 Volume Strategy (3 strategies mixed)
 
@@ -95,7 +93,6 @@ The following features are absent across all stacks. They are **out of scope** f
 - **Bind mount with env var** (`${STACK_VOLUME_DIR}/path` or `${STACK_HOME}/file`) for persistent data and config/init files.
 - **Named volumes** for temporary/ephemeral data managed by Docker.
 - **No more relative paths** in active stacks.
-- **Exception:** yumbrands retains relative paths (`./dynamicconfig`) — it is a project-specific stack.
 
 Some stacks mix bind mounts and named volumes by design (e.g., telemetry uses bind mounts for configs and named volumes for temp data). This is acceptable.
 
@@ -104,7 +101,6 @@ Some stacks mix bind mounts and named volumes by design (e.g., telemetry uses bi
 ~~Resolved.~~ Fixed:
 - **minio**: `container_name` corrected from `minio-server-server` to `minio-server`.
 - **kafka**: service key renamed from `kafka-ui` to `kafka-webui` to match `container_name`.
-- **Exception:** yumbrands retains `mockordertransmission` / `mock-order-transmission` mismatch — it is a project-specific stack.
 
 ### 3.5 YAML Formatting Issues
 
@@ -113,21 +109,21 @@ Some stacks mix bind mounts and named volumes by design (e.g., telemetry uses bi
 - Extra spaces in network names (oracle-23ai, sql-server-2022).
 - 3-space indentation on networks blocks (minio, localstack-pro, oracle-23ai, sql-server-2022) — corrected to 2 spaces.
 - Commented volume line removed (oracle-23ai).
-- Port quotes standardized to `"host:container"` across all stacks (including yumbrands).
+- Port quotes standardized to `"host:container"` across all stacks.
 
 ### 3.6 `.envrc` Alias Formatting
 
 ~~Resolved.~~ Fixed:
-- All aliases now use double space after `alias` (consistent across 18/18 stacks).
-- Missing space in `#---` separators corrected (telemetry, temporal, yumbrands).
+- All aliases now use double space after `alias` (consistent across 17/17 stacks).
+- Missing space in `#---` separators corrected (telemetry, temporal).
 
 ### 3.7 Port Conflicts
 
-~~Resolved.~~ No port conflicts exist between the 17 reusable stacks when running simultaneously.
+~~Resolved.~~ No port conflicts exist between the 17 stacks when running simultaneously.
 
 Conflicts were previously resolved by prefixing `1` to the host port (convention: `1XXXX:XXXX`):
 
-**Temporal** — avoided conflict with yumbrands:
+**Temporal** — remapped to avoid historical conflict:
 - `7233` → `17233:7233`
 - `8233` → `18233:8233`
 
@@ -138,13 +134,11 @@ Conflicts were previously resolved by prefixing `1` to the host port (convention
 - `8081` → `18081:18081`
 - `8082` → `18082:18082`
 
-**Postgres** — avoided conflict with yumbrands:
-- `5432` → `15432:5432` (yumbrands-postgres uses 5432)
+**Postgres** — remapped to avoid historical conflict:
+- `5432` → `15432:5432`
 
 **Sonarqube** — avoided conflict with minio:
 - `9000` → `19000:9000` (minio uses 9000)
-
-**Note:** yumbrands still conflicts with kafka (ports 2181, 8080, 9092, 9093) — accepted as exception since they cannot run simultaneously.
 
 ---
 
@@ -410,26 +404,6 @@ Healthcheck:    No
 Extras:         command (server start-dev ...), working_dir: /temporal
 ```
 
-### 4.18 yumbrands (exception — project-specific stack)
-
-```
-File:           yumbrands/yumbrands-stack-compose.yml
-Services:       postgres, kafka-zookeeper, kafka-broker, kafka-ui, commerceorderservicedbm,
-                mockordertransmission, temporal-elasticsearch, temporal-postgres,
-                temporal, temporal-admin-tools, temporal-ui
-Platform:       linux/amd64 (all services)      << required by private images
-Restart:        unless-stopped
-Env handling:   Hardcoded credentials + map format (standardized from list format)
-Volumes:        Named volumes + relative path (./dynamicconfig)
-Ports:          "5432:5432", "2181:2181", "9093:9093", "9092:9092", "8080:8080", "3009:3009", "7233:7233", "8088:8080"
-depends_on:     broker -> zookeeper, dbm -> postgres, temporal -> postgres+es, admin -> temporal, ui -> temporal
-Healthcheck:    No
-Extras:         profiles (commerceorderservicedbm: optional), labels (temporal: kompose.volume.type),
-                stdin_open + tty (admin-tools), expose (zookeeper, broker, elasticsearch, postgres internal)
-Exclusions:     Hardcoded credentials, relative paths, naming mismatch (mockordertransmission/mock-order-transmission).
-                This is a project-specific environment, not a reusable service.
-```
-
 ---
 
 ## 5. Proposed Template
@@ -631,7 +605,6 @@ Use this checklist when reviewing each stack. Mark exclusions with a reason.
 | sql-server-2022 | [x] | [x] | |
 | telemetry | [x] | [x] | |
 | temporal | [x] | [x] | |
-| yumbrands | [x] | [x] | Hardcoded credentials, relative paths, naming mismatch |
 
 ---
 
@@ -650,8 +623,7 @@ Stacks relevant to the [Aluna](https://github.com/guidomau/aluna) platform (loca
 | **keycloak** | **SI** | `unless-stopped` | Identity provider para auth local |
 | **temporal** | **SI** | `unless-stopped` | Orquestación de workflows del runtime |
 | **redpanda** | **SI** | `unless-stopped` | Event streaming entre microservicios |
-| yumbrands | No | `unless-stopped` | Otro proyecto (comparte entorno) |
-| kafka | No | `no` | Conflicta con redpanda/yumbrands |
+| kafka | No | `no` | Conflicta con redpanda |
 | localstack-pro | No | `no` | Emula AWS, no GCP |
 | mongo | No | `no` | PostgreSQL elegido |
 | n8n | No | `no` | Competidor, no dependencia |
