@@ -13,8 +13,8 @@ services:
       - "4318:4318"   # OTLP http receiver
       - "55679:55679" # zpages extension
     volumes:
-      - "${TELEMETRY_VOLUME_DIR}/otel-collector-config.yaml:/etc/otelcol/config.yaml"
-      - "${TELEMETRY_VOLUME_DIR}/otel-data:/otel-data"
+      - "${TELEMETRY_VOLUME_DIR:-.}/otel-collector-config.yaml:/etc/otelcol/config.yaml"
+      - "${TELEMETRY_VOLUME_DIR:-.}/otel-data:/otel-data"
       - telemetry-otel-collector-server_temp:/tmp
     networks:
       - telemetry-network
@@ -42,7 +42,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - "${TELEMETRY_VOLUME_DIR}/prometheus-config.yaml:/etc/prometheus/prometheus.yml"
+      - "${TELEMETRY_VOLUME_DIR:-.}/prometheus-config.yaml:/etc/prometheus/prometheus.yml"
       - telemetry-prometheus_prometheus:/prometheus
     networks:
       - telemetry-network

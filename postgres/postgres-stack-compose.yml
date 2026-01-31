@@ -5,12 +5,12 @@ services:
     platform: linux/arm64
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      - "15432:5432"
     environment:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
-      - "${POSTGRES_VOLUME_DIR}/data:/var/lib/postgresql/data"
-      - "${POSTGRES_HOME}/extension.sql:/docker-entrypoint-initdb.d/extension.sql"
+      - "${POSTGRES_VOLUME_DIR:-./volume}/data:/var/lib/postgresql"
+      - "${POSTGRES_HOME:-.}/extension.sql:/docker-entrypoint-initdb.d/extension.sql"
     networks:
       - postgres-network
 

@@ -13,6 +13,14 @@ alias  KAFKA_STACK_UP="docker compose -f $SERVICES_HOME/kafka/kafka-stack-compos
 alias  KAFKA_STACK_STOP="docker compose -f $SERVICES_HOME/kafka/kafka-stack-compose.yml -p kafka-stack stop"
 alias  KAFKA_STACK_DOWN="docker compose -f $SERVICES_HOME/kafka/kafka-stack-compose.yml -p kafka-stack down"
 
+# ------------- KEYCLOAK ------------- #
+alias  KEYCLOAK_STACK_UP="docker compose -f $SERVICES_HOME/keycloak/keycloak-stack-compose.yml -p keycloak-stack up --detach --remove-orphans"
+alias  KEYCLOAK_STACK_STOP="docker compose -f $SERVICES_HOME/keycloak/keycloak-stack-compose.yml -p keycloak-stack stop"
+alias  KEYCLOAK_STACK_DOWN="docker compose -f $SERVICES_HOME/keycloak/keycloak-stack-compose.yml -p keycloak-stack down"
+export KEYCLOAK_ADMIN_USERNAME="keycloak"
+export KEYCLOAK_ADMIN_PASSWORD=""  # Set your password
+export KEYCLOAK_VOLUME_DIR="$SERVICES_HOME/keycloak/volume"
+
 # ------------- LOCALSTACK ------------- #
 alias  LOCALSTACK_STACK_UP="docker compose -f $SERVICES_HOME/localstack-pro/localstack-pro-stack-compose.yml -p localstack-pro-stack up --detach --remove-orphans"
 alias  LOCALSTACK_STACK_STOP="docker compose -f $SERVICES_HOME/localstack-pro/localstack-pro-stack-compose.yml -p localstack-pro-stack stop"
@@ -20,6 +28,11 @@ alias  LOCALSTACK_STACK_DOWN="docker compose -f $SERVICES_HOME/localstack-pro/lo
 export LOCALSTACK_AUTH_TOKEN=""  # Get from https://app.localstack.cloud
 export LOCALSTACK_DOCKER_NAME="localstack-pro"
 export LOCALSTACK_VOLUME_DIR="$SERVICES_HOME/localstack-pro/volume"
+
+# ------------- MAILHOG ------------- #
+alias  MAILHOG_STACK_UP="docker compose -f $SERVICES_HOME/mailhog/mailhog-stack-compose.yml -p mailhog-stack up --detach --remove-orphans"
+alias  MAILHOG_STACK_STOP="docker compose -f $SERVICES_HOME/mailhog/mailhog-stack-compose.yml -p mailhog-stack stop"
+alias  MAILHOG_STACK_DOWN="docker compose -f $SERVICES_HOME/mailhog/mailhog-stack-compose.yml -p mailhog-stack down"
 
 # ------------- MINIO ------------- #
 alias  MINIO_STACK_UP="docker compose -f $SERVICES_HOME/minio/minio-stack-compose.yml -p minio-stack up --detach --remove-orphans"
@@ -37,6 +50,21 @@ export MONGO_INITDB_ROOT_USERNAME="mongo"
 export MONGO_INITDB_ROOT_PASSWORD=""  # Set your password
 export MONGO_VOLUME_DIR="$SERVICES_HOME/mongo/volume"
 
+# ------------- N8N ------------- #
+alias  N8N_STACK_UP="docker compose -f $SERVICES_HOME/n8n/n8n-stack-compose.yml -p n8n-stack up --detach --remove-orphans"
+alias  N8N_STACK_STOP="docker compose -f $SERVICES_HOME/n8n/n8n-stack-compose.yml -p n8n-stack stop"
+alias  N8N_STACK_DOWN="docker compose -f $SERVICES_HOME/n8n/n8n-stack-compose.yml -p n8n-stack down"
+export N8N_BASIC_AUTH_USER="n8n"
+export N8N_BASIC_AUTH_PASSWORD=""  # Set your password
+export N8N_ENCRYPTION_KEY=""  # Set your encryption key
+export N8N_VOLUME_DIR="$SERVICES_HOME/n8n/volume"
+
+# ------------- OPENFGA ------------- #
+alias  OPENFGA_STACK_UP="docker compose -f $SERVICES_HOME/openfga/openfga-stack-compose.yml -p openfga-stack up --detach --remove-orphans"
+alias  OPENFGA_STACK_STOP="docker compose -f $SERVICES_HOME/openfga/openfga-stack-compose.yml -p openfga-stack stop"
+alias  OPENFGA_STACK_DOWN="docker compose -f $SERVICES_HOME/openfga/openfga-stack-compose.yml -p openfga-stack down"
+export OPENFGA_VOLUME_DIR="$SERVICES_HOME/openfga/volume"
+
 # ------------- ORACLE 23ai ------------- #
 alias  ORACLE_STACK_UP="docker compose -f $SERVICES_HOME/oracle-23ai/oracle-23ai-stack-compose.yml -p oracle-23ai-stack up --detach --remove-orphans"
 alias  ORACLE_STACK_STOP="docker compose -f $SERVICES_HOME/oracle-23ai/oracle-23ai-stack-compose.yml -p oracle-23ai-stack stop"
@@ -51,6 +79,14 @@ alias  POSTGRES_STACK_DOWN="docker compose -f $SERVICES_HOME/postgres/postgres-s
 export POSTGRES_PASSWORD=""  # Set your password
 export POSTGRES_HOME="$SERVICES_HOME/postgres"
 export POSTGRES_VOLUME_DIR="$POSTGRES_HOME/volume"
+
+# ------------- RABBITMQ ------------- #
+alias  RABBITMQ_STACK_UP="docker compose -f $SERVICES_HOME/rabbitmq/rabbitmq-stack-compose.yml -p rabbitmq-stack up --detach --remove-orphans"
+alias  RABBITMQ_STACK_STOP="docker compose -f $SERVICES_HOME/rabbitmq/rabbitmq-stack-compose.yml -p rabbitmq-stack stop"
+alias  RABBITMQ_STACK_DOWN="docker compose -f $SERVICES_HOME/rabbitmq/rabbitmq-stack-compose.yml -p rabbitmq-stack down"
+export RABBITMQ_DEFAULT_USER="rabbitmq"
+export RABBITMQ_DEFAULT_PASS=""  # Set your password
+export RABBITMQ_VOLUME_DIR="$SERVICES_HOME/rabbitmq/volume"
 
 # ------------- REDIS ------------- #
 alias  REDIS_STACK_UP="docker compose -f $SERVICES_HOME/redis/redis-stack-compose.yml -p redis-stack up --detach --remove-orphans"

@@ -2,27 +2,26 @@ services:
   openfga-migrate:
     container_name: openfga-migrate
     image: openfga/openfga:latest
+    platform: linux/arm64
     restart: no
     command: migrate
-    user: nonroot
     environment:
       OPENFGA_DATASTORE_ENGINE: "sqlite"
       OPENFGA_DATASTORE_URI: "file:/home/nonroot/openfga.db"
     volumes:
       - "${OPENFGA_VOLUME_DIR:-./volume}:/home/nonroot"
-      - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
       - openfga-network
 
   openfga-server:
     container_name: openfga-server
     image: openfga/openfga:latest
-    restart: unless-stopped
-    command: run
-    user: nonroot
+    platform: linux/arm64
+    restart: no
     depends_on:
       openfga-migrate:
         condition: service_completed_successfully
+    command: run
     ports:
       - "8280:8080"
       - "8281:8081"
@@ -33,7 +32,6 @@ services:
       OPENFGA_LOG_FORMAT: "json"
     volumes:
       - "${OPENFGA_VOLUME_DIR:-./volume}:/home/nonroot"
-      - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
       - openfga-network
 

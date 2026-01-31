@@ -2,16 +2,17 @@ services:
   n8n-server:
     container_name: n8n-server
     image: n8nio/n8n:latest
+    platform: linux/arm64
     restart: no
     ports:
       - "5678:5678"
     environment:
-      N8N_BASIC_AUTH_ACTIVE: true
-      N8N_BASIC_AUTH_USER: ${N8N_BASIC_AUTH_USER}
-      N8N_BASIC_AUTH_PASSWORD: ${N8N_BASIC_AUTH_PASSWORD}
-      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
-      GENERIC_TIMEZONE: America/Bogota
-      TZ: America/Bogota
+      N8N_BASIC_AUTH_ACTIVE: "true"
+      N8N_BASIC_AUTH_USER: "${N8N_BASIC_AUTH_USER}"
+      N8N_BASIC_AUTH_PASSWORD: "${N8N_BASIC_AUTH_PASSWORD}"
+      N8N_ENCRYPTION_KEY: "${N8N_ENCRYPTION_KEY}"
+      GENERIC_TIMEZONE: "America/Bogota"
+      TZ: "America/Bogota"
     volumes:
       - /dev/urandom:/dev/random:ro
       - "${N8N_VOLUME_DIR:-./volume}:/home/node/.n8n"
@@ -20,5 +21,5 @@ services:
 
 networks:
   n8n-network:
-    name:  n8n-network
+    name: n8n-network
     driver: bridge

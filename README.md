@@ -1,6 +1,6 @@
 # Docker Compose Standards & Analysis
 
-> Analysis of the 13 active service stacks in this repository.
+> Analysis of the 18 active service stacks in this repository.
 > Use this document as reference for standardization work on a case-by-case basis.
 
 ---
@@ -21,24 +21,29 @@
 | # | Directory | Compose File | Type | Services |
 |---|-----------|-------------|------|----------|
 | 1 | `kafka/` | `kafka-stack-compose.yml` | Multi-service | kafka-zookeeper, kafka-broker, kafka-ui |
-| 2 | `localstack-pro/` | `localstack-pro-stack-compose.yml` | Single | localstack-pro-server |
-| 3 | `minio/` | `minio-stack-compose.yml` | Single | minio-server |
-| 4 | `mongo/` | `mongo-stack-compose.yml` | Single | mongo-server |
-| 5 | `oracle-23ai/` | `oracle-23ai-stack-compose.yml` | Single | oracle-23ai-server |
-| 6 | `postgres/` | `postgres-stack-compose.yml` | Single | postgres-server |
-| 7 | `redis/` | `redis-stack-compose.yml` | Single | redis-server |
-| 8 | `redpanda/` | `redpanda-stack-compose.yml` | Multi-service | redpanda-broker, redpanda-console |
-| 9 | `sonarqube/` | `sonarqube-stack-compose.yml` | Multi-service | sonarqube-server, sonarqube-postgres |
-| 10 | `sql-server-2022/` | `sql-server-2022-stack-compose.yml` | Single | sqlserver-2022-server |
-| 11 | `telemetry/` | `telemetry-stack-compose.yml` | Multi-service | telemetry-otel-collector, telemetry-jaeger, telemetry-prometheus |
-| 12 | `temporal/` | `temporal-dev-stack-compose.yml` | Single | temporal-dev-server |
-| 13 | `yumbrands/` | `yumbrands-stack-compose.yml` | Multi-service | 11 services (postgres, kafka, temporal, etc.) |
+| 2 | `keycloak/` | `keycloak-stack-compose.yml` | Single | keycloak-server |
+| 3 | `localstack-pro/` | `localstack-pro-stack-compose.yml` | Single | localstack-pro-server |
+| 4 | `mailhog/` | `mailhog-stack-compose.yml` | Single | mailhog-server |
+| 5 | `minio/` | `minio-stack-compose.yml` | Single | minio-server |
+| 6 | `mongo/` | `mongo-stack-compose.yml` | Single | mongo-server |
+| 7 | `n8n/` | `n8n-stack-compose.yml` | Single | n8n-server |
+| 8 | `openfga/` | `openfga-stack-compose.yml` | Multi-service | openfga-migrate, openfga-server |
+| 9 | `oracle-23ai/` | `oracle-23ai-stack-compose.yml` | Single | oracle-23ai-server |
+| 10 | `postgres/` | `postgres-stack-compose.yml` | Single | postgres-server |
+| 11 | `rabbitmq/` | `rabbitmq-stack-compose.yml` | Single | rabbitmq-server |
+| 12 | `redis/` | `redis-stack-compose.yml` | Single | redis-server |
+| 13 | `redpanda/` | `redpanda-stack-compose.yml` | Multi-service | redpanda-broker, redpanda-console |
+| 14 | `sonarqube/` | `sonarqube-stack-compose.yml` | Multi-service | sonarqube-server, sonarqube-postgres |
+| 15 | `sql-server-2022/` | `sql-server-2022-stack-compose.yml` | Single | sqlserver-2022-server |
+| 16 | `telemetry/` | `telemetry-stack-compose.yml` | Multi-service | telemetry-otel-collector, telemetry-jaeger, telemetry-prometheus |
+| 17 | `temporal/` | `temporal-dev-stack-compose.yml` | Single | temporal-dev-server |
+| 18 | `yumbrands/` | `yumbrands-stack-compose.yml` | Multi-service | 11 services (postgres, kafka, temporal, etc.) |
 
 ---
 
 ## 2. Current Pattern Analysis
 
-### 2.1 What IS Already Consistent (13/13 stacks)
+### 2.1 What IS Already Consistent (18/18 stacks)
 
 | Aspect | Pattern |
 |--------|---------|
@@ -53,13 +58,13 @@
 
 | Aspect | Dominant Pattern | Adoption |
 |--------|-----------------|----------|
-| `restart:` | `unless-stopped` | 13/13 |
-| `platform:` | `linux/arm64` | 11/13 |
-| Environment vars | Map format, shell substitution from `.envrc` (`"${VAR}"`) for credentials | 12/13 (yumbrands exception) |
-| Volumes | Bind mounts with `${SERVICE_VOLUME_DIR}/path:/container/path` | 9/13 |
-| Image tags | `:latest` | 11/13 (sql-server uses `2022-latest`, yumbrands uses pinned versions) |
+| `restart:` | `unless-stopped` | 18/18 (openfga-migrate uses `no` — one-shot task) |
+| `platform:` | `linux/arm64` | 15/18 (sql-server, yumbrands: amd64; mailhog: amd64) |
+| Environment vars | Map format, shell substitution from `.envrc` (`"${VAR}"`) for credentials | 17/18 (yumbrands exception) |
+| Volumes | Bind mounts with `${SERVICE_VOLUME_DIR}/path:/container/path` | 13/18 |
+| Image tags | `:latest` | 15/18 (sql-server uses `2022-latest`, yumbrands uses pinned versions, rabbitmq uses `management`) |
 
-### 2.3 What Is NOT Present (0/13 stacks) — Out of Scope
+### 2.3 What Is NOT Present (0/18 stacks) — Out of Scope
 
 The following features are absent across all stacks. They are **out of scope** for this standardization effort — this is a local development environment, not production infrastructure.
 
@@ -113,12 +118,12 @@ Some stacks mix bind mounts and named volumes by design (e.g., telemetry uses bi
 ### 3.6 `.envrc` Alias Formatting
 
 ~~Resolved.~~ Fixed:
-- All aliases now use double space after `alias` (consistent across 13/13 stacks).
+- All aliases now use double space after `alias` (consistent across 18/18 stacks).
 - Missing space in `#---` separators corrected (telemetry, temporal, yumbrands).
 
 ### 3.7 Port Conflicts
 
-~~Resolved.~~ No port conflicts exist between the 12 reusable stacks when running simultaneously.
+~~Resolved.~~ No port conflicts exist between the 17 reusable stacks when running simultaneously.
 
 Conflicts were previously resolved by prefixing `1` to the host port (convention: `1XXXX:XXXX`):
 
@@ -133,10 +138,13 @@ Conflicts were previously resolved by prefixing `1` to the host port (convention
 - `8081` → `18081:18081`
 - `8082` → `18082:18082`
 
+**Postgres** — avoided conflict with yumbrands:
+- `5432` → `15432:5432` (yumbrands-postgres uses 5432)
+
 **Sonarqube** — avoided conflict with minio:
 - `9000` → `19000:9000` (minio uses 9000)
 
-**Note:** yumbrands still conflicts with kafka (ports 2181, 8080, 9092, 9093) and postgres (port 5432) — accepted as exception since they cannot run simultaneously.
+**Note:** yumbrands still conflicts with kafka (ports 2181, 8080, 9092, 9093) — accepted as exception since they cannot run simultaneously.
 
 ---
 
@@ -157,7 +165,22 @@ Healthcheck:    No
 Extras:         None
 ```
 
-### 4.2 localstack-pro
+### 4.2 keycloak
+
+```
+File:           keycloak/keycloak-stack-compose.yml
+Services:       keycloak-server
+Platform:       linux/arm64
+Restart:        unless-stopped
+Env handling:   Shell substitution (${KEYCLOAK_ADMIN_USERNAME}, ${KEYCLOAK_ADMIN_PASSWORD})
+Volumes:        Env var bind mount (${KEYCLOAK_VOLUME_DIR}/data)
+Ports:          "8180:8080"
+depends_on:     None
+Healthcheck:    No
+Extras:         command: start-dev (development mode)
+```
+
+### 4.3 localstack-pro
 
 ```
 File:           localstack-pro/localstack-pro-stack-compose.yml
@@ -172,7 +195,22 @@ Healthcheck:    No
 Extras:         Ports bound to 127.0.0.1 only (unique in repo), Docker socket mount
 ```
 
-### 4.3 minio
+### 4.4 mailhog
+
+```
+File:           mailhog/mailhog-stack-compose.yml
+Services:       mailhog-server
+Platform:       linux/amd64                     << archived project, amd64 images only
+Restart:        unless-stopped
+Env handling:   None (no environment block)
+Volumes:        None (stateless)
+Ports:          "1025:1025", "8025:8025"
+depends_on:     None
+Healthcheck:    No
+Extras:         None
+```
+
+### 4.5 minio
 
 ```
 File:           minio/minio-stack-compose.yml
@@ -187,7 +225,7 @@ Healthcheck:    No
 Extras:         command: server /data --console-address ":9001"
 ```
 
-### 4.4 mongo
+### 4.6 mongo
 
 ```
 File:           mongo/mongo-stack-compose.yml
@@ -202,7 +240,37 @@ Healthcheck:    No
 Extras:         None
 ```
 
-### 4.5 oracle-23ai
+### 4.7 n8n
+
+```
+File:           n8n/n8n-stack-compose.yml
+Services:       n8n-server
+Platform:       linux/arm64
+Restart:        unless-stopped
+Env handling:   Shell substitution (credentials) + hardcoded (timezone: America/Bogota)
+Volumes:        Env var bind mount (${N8N_VOLUME_DIR}) + /dev/urandom:/dev/random:ro
+Ports:          "5678:5678"
+depends_on:     None
+Healthcheck:    No
+Extras:         None
+```
+
+### 4.8 openfga
+
+```
+File:           openfga/openfga-stack-compose.yml
+Services:       openfga-migrate, openfga-server
+Platform:       linux/arm64
+Restart:        unless-stopped (server), no (migrate — one-shot task)
+Env handling:   Hardcoded (datastore config: sqlite)
+Volumes:        Env var bind mount (${OPENFGA_VOLUME_DIR})
+Ports:          "8280:8080", "8281:8081", "3200:3000"
+depends_on:     server -> migrate (service_completed_successfully)
+Healthcheck:    No
+Extras:         command: migrate (init), command: run (server)
+```
+
+### 4.9 oracle-23ai
 
 ```
 File:           oracle-23ai/oracle-23ai-stack-compose.yml
@@ -217,7 +285,7 @@ Healthcheck:    No
 Extras:         None
 ```
 
-### 4.6 postgres
+### 4.10 postgres
 
 ```
 File:           postgres/postgres-stack-compose.yml
@@ -226,13 +294,28 @@ Platform:       linux/arm64
 Restart:        unless-stopped
 Env handling:   Shell substitution (no defaults)
 Volumes:        Env var bind mounts (${POSTGRES_VOLUME_DIR}/data + ${POSTGRES_HOME}/extension.sql)
-Ports:          "5432:5432"
+Ports:          "15432:5432"
 depends_on:     None
 Healthcheck:    No
 Extras:         Init SQL script mounted to docker-entrypoint-initdb.d
 ```
 
-### 4.7 redis
+### 4.11 rabbitmq
+
+```
+File:           rabbitmq/rabbitmq-stack-compose.yml
+Services:       rabbitmq-server
+Platform:       linux/arm64
+Restart:        unless-stopped
+Env handling:   Shell substitution (${RABBITMQ_DEFAULT_USER}, ${RABBITMQ_DEFAULT_PASS})
+Volumes:        Env var bind mount (${RABBITMQ_VOLUME_DIR}/data)
+Ports:          "5672:5672", "15672:15672"
+depends_on:     None
+Healthcheck:    No
+Extras:         None
+```
+
+### 4.12 redis
 
 ```
 File:           redis/redis-stack-compose.yml
@@ -247,7 +330,7 @@ Healthcheck:    No
 Extras:         None
 ```
 
-### 4.8 redpanda
+### 4.13 redpanda
 
 ```
 File:           redpanda/redpanda-stack-compose.yml
@@ -262,7 +345,7 @@ Healthcheck:    No
 Extras:         Complex command (broker), entrypoint override (console: /bin/sh -c ...)
 ```
 
-### 4.9 sonarqube
+### 4.14 sonarqube
 
 ```
 File:           sonarqube/sonarqube-stack-compose.yml
@@ -277,7 +360,7 @@ Healthcheck:    No
 Extras:         Postgres has no exposed ports (internal only via network)
 ```
 
-### 4.10 sql-server-2022
+### 4.15 sql-server-2022
 
 ```
 File:           sql-server-2022/sql-server-2022-stack-compose.yml
@@ -292,7 +375,7 @@ Healthcheck:    No
 Extras:         None
 ```
 
-### 4.11 telemetry
+### 4.16 telemetry
 
 ```
 File:           telemetry/telemetry-stack-compose.yml
@@ -307,7 +390,7 @@ Healthcheck:    No
 Extras:         Inline port comments (e.g. # pprof extension)
 ```
 
-### 4.12 temporal
+### 4.17 temporal
 
 ```
 File:           temporal/temporal-dev-stack-compose.yml
@@ -322,7 +405,7 @@ Healthcheck:    No
 Extras:         command (server start-dev ...), working_dir: /temporal
 ```
 
-### 4.13 yumbrands (exception — project-specific stack)
+### 4.18 yumbrands (exception — project-specific stack)
 
 ```
 File:           yumbrands/yumbrands-stack-compose.yml
@@ -519,11 +602,16 @@ Use this checklist when reviewing each stack. Mark exclusions with a reason.
 | Stack | Reviewed | Standardized | Exclusions |
 |-------|----------|-------------|------------|
 | kafka | [x] | [x] | |
+| keycloak | [x] | [x] | |
 | localstack-pro | [x] | [x] | |
+| mailhog | [x] | [x] | platform: linux/amd64 (archived project, no arm64 images) |
 | minio | [x] | [x] | |
 | mongo | [x] | [x] | |
+| n8n | [x] | [x] | Hardcoded timezone (America/Bogota) |
+| openfga | [x] | [x] | openfga-migrate uses restart: no (one-shot task) |
 | oracle-23ai | [x] | [x] | |
 | postgres | [x] | [x] | |
+| rabbitmq | [x] | [x] | Image tag `management` instead of `latest` |
 | redis | [x] | [x] | |
 | redpanda | [x] | [x] | |
 | sonarqube | [x] | [x] | |
@@ -531,3 +619,30 @@ Use this checklist when reviewing each stack. Mark exclusions with a reason.
 | telemetry | [x] | [x] | |
 | temporal | [x] | [x] | |
 | yumbrands | [x] | [x] | Hardcoded credentials, relative paths, naming mismatch |
+
+---
+
+## 7. Aluna Project — Stack Applicability
+
+Stacks relevant to the [Aluna](https://github.com/guidomau/aluna) platform (local development, no GCP). Stacks marked as Aluna-applicable use `restart: unless-stopped` (auto-start with OrbStack); non-applicable stacks use `restart: no`.
+
+| Stack | Aplica a Aluna | `restart:` | Uso |
+|-------|---------------|------------|-----|
+| **postgres** | **SI** | `unless-stopped` | BD principal multi-tenant (puerto `15432`) |
+| **redis** | **SI** | `unless-stopped` | Cache, sesiones, rate limiting |
+| **minio** | **SI** | `unless-stopped` | Almacenamiento de archivos/objetos |
+| **telemetry** | **SI** | `unless-stopped` | Observabilidad (OTEL + Jaeger + Prometheus) |
+| **rabbitmq** | **SI** | `unless-stopped` | Cola async para despachar jobs al runtime |
+| **mailhog** | **SI** | `unless-stopped` | Emails (notificaciones, invitaciones tenant) |
+| **keycloak** | **SI** | `unless-stopped` | Identity provider para auth local |
+| **temporal** | **SI** | `unless-stopped` | Orquestación de workflows del runtime |
+| **redpanda** | **SI** | `unless-stopped` | Event streaming entre microservicios |
+| yumbrands | No | `unless-stopped` | Otro proyecto (comparte entorno) |
+| kafka | No | `no` | Conflicta con redpanda/yumbrands |
+| localstack-pro | No | `no` | Emula AWS, no GCP |
+| mongo | No | `no` | PostgreSQL elegido |
+| n8n | No | `no` | Competidor, no dependencia |
+| openfga | No | `no` | RBAC a nivel de aplicación |
+| oracle-23ai | No | `no` | PostgreSQL elegido |
+| sonarqube | No | `no` | Quality gate, no runtime |
+| sql-server-2022 | No | `no` | PostgreSQL elegido |

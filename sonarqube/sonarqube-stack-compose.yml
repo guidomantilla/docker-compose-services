@@ -3,7 +3,7 @@ services:
     container_name: sonarqube-server
     image: sonarqube:latest
     platform: linux/arm64
-    restart: unless-stopped
+    restart: no
     ports:
       - "19000:9000"
     depends_on:
@@ -24,10 +24,9 @@ services:
     container_name: sonarqube-postgres
     image: postgres:latest
     platform: linux/arm64
-    restart: unless-stopped
+    restart: no
     volumes:
       - sonarqube-postgres:/var/lib/postgresql
-      - sonarqube-postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: "${SONARQUBE_JDBC_USERNAME}"
       POSTGRES_PASSWORD: "${SONARQUBE_JDBC_PASSWORD}"
