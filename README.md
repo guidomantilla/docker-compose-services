@@ -539,7 +539,8 @@ networks:
 - **Named volumes**: Use only for temporary/ephemeral data (temp dirs) or when Docker-managed lifecycle is preferred.
 - **Config files**: Use `${STACK_VOLUME_DIR}/config.yaml:/container/config.yaml` (not relative paths).
 - **Init/support files**: Use `${STACK_HOME}/file:/container/path` for files that live in the stack root (not inside `volume/`).
-- **Volume dir default**: Include `:-./volume` fallback for local development without `.envrc`.
+- **Volume dir default**: Include `:-./volume` fallback for local development without `.envrc`. Use `:-.` when the env var points to the stack root (e.g., `TELEMETRY_VOLUME_DIR`, `POSTGRES_HOME`).
+- **`.gitkeep`**: Every `volume/` directory must contain a `.gitkeep` file so git tracks the empty directory. Data inside `volume/` is excluded via `.gitignore`.
 
 #### Ports
 
