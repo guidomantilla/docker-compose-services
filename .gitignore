@@ -44,9 +44,4 @@ telemetry/otel-data/*
 # Excluded projects
 # ===========================================
 yumbrands/
-
-# ===========================================
-# Deprecated project specific ignores
-# ===========================================
-_deprecated/porchpass/firebase-emulator/cache
-_deprecated/porchpass/.pg
+_deprecated/porchpass/
