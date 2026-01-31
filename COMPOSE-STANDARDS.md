@@ -116,6 +116,28 @@ Some stacks mix bind mounts and named volumes by design (e.g., telemetry uses bi
 - All aliases now use double space after `alias` (consistent across 13/13 stacks).
 - Missing space in `#---` separators corrected (telemetry, temporal, yumbrands).
 
+### 3.7 Port Conflicts
+
+~~Resolved.~~ No port conflicts exist between the 12 reusable stacks when running simultaneously.
+
+Conflicts were previously resolved by prefixing `1` to the host port (convention: `1XXXX:XXXX`):
+
+**Temporal** — avoided conflict with yumbrands:
+- `7233` → `17233:7233`
+- `8233` → `18233:8233`
+
+**Redpanda** — avoided conflict with kafka:
+- `8080` → `18080:8080` (kafka-webui uses 8080)
+- `9092` → `19092:9092` (kafka-broker uses 9092)
+- `9644` → `19644:9644`
+- `8081` → `18081:18081`
+- `8082` → `18082:18082`
+
+**Sonarqube** — avoided conflict with minio:
+- `9000` → `19000:9000` (minio uses 9000)
+
+**Note:** yumbrands still conflicts with kafka (ports 2181, 8080, 9092, 9093) and postgres (port 5432) — accepted as exception since they cannot run simultaneously.
+
 ---
 
 ## 4. Per-Stack Detail
