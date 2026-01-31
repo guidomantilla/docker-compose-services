@@ -15,6 +15,6 @@ services:
       - sqlserver-2022-network
 
 networks:
-   sqlserver-2022-network:
-    name:  sqlserver-2022-network
+  sqlserver-2022-network:
+    name: sqlserver-2022-network
     driver: bridge

@@ -1,9 +1,9 @@
 services:
   minio-server:
-    container_name: minio-server-server
+    container_name: minio-server
     image: minio/minio:latest
     platform: linux/arm64
-    restart: no
+    restart: unless-stopped
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -14,9 +14,9 @@ services:
     volumes:
       - "${MINIO_VOLUME_DIR:-./volume}:/data"
     networks:
-      -  minio-network
+      - minio-network
 
 networks:
-   minio-network:
+  minio-network:
     name: minio-network
     driver: bridge

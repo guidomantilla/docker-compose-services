@@ -1,129 +1,98 @@
-# ===========================================
-# SERVICES - Environment Configuration Template
-# ===========================================
-# Copy this file to .envrc and fill in your values
-# Then run: direnv allow
-# ===========================================
-
+# --- services ---
 export SERVICES_HOME="$HOME/Workspace/services"
 
-# --- AWS (for LocalStack) ---
 export AWS_ACCESS_KEY_ID="test"
 export AWS_SECRET_ACCESS_KEY="test"
 export AWS_DEFAULT_REGION="us-east-1"
-
-# --- API Keys (optional) ---
 export PAT=""
 export OPENAI_API_KEY=""
 
 
-# ============================================
-# KAFKA
-# ============================================
-alias KAFKA_STACK_UP="docker compose -f $SERVICES_HOME/kafka/kafka-stack-compose.yml -p kafka-stack up --detach --remove-orphans"
-alias KAFKA_STACK_STOP="docker compose -f $SERVICES_HOME/kafka/kafka-stack-compose.yml -p kafka-stack stop"
-alias KAFKA_STACK_DOWN="docker compose -f $SERVICES_HOME/kafka/kafka-stack-compose.yml -p kafka-stack down"
+# ------------- KAFKA ------------- #
+alias  KAFKA_STACK_UP="docker compose -f $SERVICES_HOME/kafka/kafka-stack-compose.yml -p kafka-stack up --detach --remove-orphans"
+alias  KAFKA_STACK_STOP="docker compose -f $SERVICES_HOME/kafka/kafka-stack-compose.yml -p kafka-stack stop"
+alias  KAFKA_STACK_DOWN="docker compose -f $SERVICES_HOME/kafka/kafka-stack-compose.yml -p kafka-stack down"
 
-# ============================================
-# LOCALSTACK PRO
-# ============================================
-alias LOCALSTACK_STACK_UP="docker compose -f $SERVICES_HOME/localstack-pro/localstack-pro-stack-compose.yml -p localstack-pro-stack up --detach --remove-orphans"
-alias LOCALSTACK_STACK_STOP="docker compose -f $SERVICES_HOME/localstack-pro/localstack-pro-stack-compose.yml -p localstack-pro-stack stop"
-alias LOCALSTACK_STACK_DOWN="docker compose -f $SERVICES_HOME/localstack-pro/localstack-pro-stack-compose.yml -p localstack-pro-stack down"
+# ------------- LOCALSTACK ------------- #
+alias  LOCALSTACK_STACK_UP="docker compose -f $SERVICES_HOME/localstack-pro/localstack-pro-stack-compose.yml -p localstack-pro-stack up --detach --remove-orphans"
+alias  LOCALSTACK_STACK_STOP="docker compose -f $SERVICES_HOME/localstack-pro/localstack-pro-stack-compose.yml -p localstack-pro-stack stop"
+alias  LOCALSTACK_STACK_DOWN="docker compose -f $SERVICES_HOME/localstack-pro/localstack-pro-stack-compose.yml -p localstack-pro-stack down"
 export LOCALSTACK_AUTH_TOKEN=""  # Get from https://app.localstack.cloud
 export LOCALSTACK_DOCKER_NAME="localstack-pro"
 export LOCALSTACK_VOLUME_DIR="$SERVICES_HOME/localstack-pro/volume"
 
-# ============================================
-# MINIO
-# ============================================
-alias MINIO_STACK_UP="docker compose -f $SERVICES_HOME/minio/minio-stack-compose.yml -p minio-stack up --detach --remove-orphans"
-alias MINIO_STACK_STOP="docker compose -f $SERVICES_HOME/minio/minio-stack-compose.yml -p minio-stack stop"
-alias MINIO_STACK_DOWN="docker compose -f $SERVICES_HOME/minio/minio-stack-compose.yml -p minio-stack down"
+# ------------- MINIO ------------- #
+alias  MINIO_STACK_UP="docker compose -f $SERVICES_HOME/minio/minio-stack-compose.yml -p minio-stack up --detach --remove-orphans"
+alias  MINIO_STACK_STOP="docker compose -f $SERVICES_HOME/minio/minio-stack-compose.yml -p minio-stack stop"
+alias  MINIO_STACK_DOWN="docker compose -f $SERVICES_HOME/minio/minio-stack-compose.yml -p minio-stack down"
 export MINIO_ROOT_USER="minio"
 export MINIO_ROOT_PASSWORD=""  # Set your password
 export MINIO_VOLUME_DIR="$SERVICES_HOME/minio/volume"
 
-# ============================================
-# MONGO
-# ============================================
-alias MONGO_STACK_UP="docker compose -f $SERVICES_HOME/mongo/mongo-stack-compose.yml -p mongo-stack up --detach --remove-orphans"
-alias MONGO_STACK_STOP="docker compose -f $SERVICES_HOME/mongo/mongo-stack-compose.yml -p mongo-stack stop"
-alias MONGO_STACK_DOWN="docker compose -f $SERVICES_HOME/mongo/mongo-stack-compose.yml -p mongo-stack down"
+# ------------- MONGO ------------- #
+alias  MONGO_STACK_UP="docker compose -f $SERVICES_HOME/mongo/mongo-stack-compose.yml -p mongo-stack up --detach --remove-orphans"
+alias  MONGO_STACK_STOP="docker compose -f $SERVICES_HOME/mongo/mongo-stack-compose.yml -p mongo-stack stop"
+alias  MONGO_STACK_DOWN="docker compose -f $SERVICES_HOME/mongo/mongo-stack-compose.yml -p mongo-stack down"
 export MONGO_INITDB_ROOT_USERNAME="mongo"
 export MONGO_INITDB_ROOT_PASSWORD=""  # Set your password
 export MONGO_VOLUME_DIR="$SERVICES_HOME/mongo/volume"
 
-# ============================================
-# ORACLE 23ai
-# ============================================
-alias ORACLE_STACK_UP="docker compose -f $SERVICES_HOME/oracle-23ai/oracle-23ai-stack-compose.yml -p oracle-23ai-stack up --detach --remove-orphans"
-alias ORACLE_STACK_STOP="docker compose -f $SERVICES_HOME/oracle-23ai/oracle-23ai-stack-compose.yml -p oracle-23ai-stack stop"
-alias ORACLE_STACK_DOWN="docker compose -f $SERVICES_HOME/oracle-23ai/oracle-23ai-stack-compose.yml -p oracle-23ai-stack down"
+# ------------- ORACLE 23ai ------------- #
+alias  ORACLE_STACK_UP="docker compose -f $SERVICES_HOME/oracle-23ai/oracle-23ai-stack-compose.yml -p oracle-23ai-stack up --detach --remove-orphans"
+alias  ORACLE_STACK_STOP="docker compose -f $SERVICES_HOME/oracle-23ai/oracle-23ai-stack-compose.yml -p oracle-23ai-stack stop"
+alias  ORACLE_STACK_DOWN="docker compose -f $SERVICES_HOME/oracle-23ai/oracle-23ai-stack-compose.yml -p oracle-23ai-stack down"
 export ORACLE_SYSTEM_PASSWORD=""  # Set your password
 export ORACLE_VOLUME_DIR="$SERVICES_HOME/oracle-23ai/volume"
 
-# ============================================
-# POSTGRES
-# ============================================
-alias POSTGRES_STACK_UP="docker compose -f $SERVICES_HOME/postgres/postgres-stack-compose.yml -p postgres-stack up --detach --remove-orphans"
-alias POSTGRES_STACK_STOP="docker compose -f $SERVICES_HOME/postgres/postgres-stack-compose.yml -p postgres-stack stop"
-alias POSTGRES_STACK_DOWN="docker compose -f $SERVICES_HOME/postgres/postgres-stack-compose.yml -p postgres-stack down"
+# ------------- POSTGRES ------------- #
+alias  POSTGRES_STACK_UP="docker compose -f $SERVICES_HOME/postgres/postgres-stack-compose.yml -p postgres-stack up --detach --remove-orphans"
+alias  POSTGRES_STACK_STOP="docker compose -f $SERVICES_HOME/postgres/postgres-stack-compose.yml -p postgres-stack stop"
+alias  POSTGRES_STACK_DOWN="docker compose -f $SERVICES_HOME/postgres/postgres-stack-compose.yml -p postgres-stack down"
 export POSTGRES_PASSWORD=""  # Set your password
-export POSTGRES_VOLUME_DIR="$SERVICES_HOME/postgres/volume"
+export POSTGRES_HOME="$SERVICES_HOME/postgres"
+export POSTGRES_VOLUME_DIR="$POSTGRES_HOME/volume"
 
-# ============================================
-# REDIS
-# ============================================
-alias REDIS_STACK_UP="docker compose -f $SERVICES_HOME/redis/redis-stack-compose.yml -p redis-stack up --detach --remove-orphans"
-alias REDIS_STACK_STOP="docker compose -f $SERVICES_HOME/redis/redis-stack-compose.yml -p redis-stack stop"
-alias REDIS_STACK_DOWN="docker compose -f $SERVICES_HOME/redis/redis-stack-compose.yml -p redis-stack down"
+# ------------- REDIS ------------- #
+alias  REDIS_STACK_UP="docker compose -f $SERVICES_HOME/redis/redis-stack-compose.yml -p redis-stack up --detach --remove-orphans"
+alias  REDIS_STACK_STOP="docker compose -f $SERVICES_HOME/redis/redis-stack-compose.yml -p redis-stack stop"
+alias  REDIS_STACK_DOWN="docker compose -f $SERVICES_HOME/redis/redis-stack-compose.yml -p redis-stack down"
 export REDIS_PASSWORD=""  # Set your password
 export REDISCLI_AUTH=$REDIS_PASSWORD
 export REDIS_VOLUME_DIR="$SERVICES_HOME/redis/volume"
 
-# ============================================
-# REDPANDA
-# ============================================
-alias REDPANDA_STACK_UP="docker compose -f $SERVICES_HOME/redpanda/redpanda-stack-compose.yml -p redpanda-stack up --detach --remove-orphans"
-alias REDPANDA_STACK_STOP="docker compose -f $SERVICES_HOME/redpanda/redpanda-stack-compose.yml -p redpanda-stack stop"
-alias REDPANDA_STACK_DOWN="docker compose -f $SERVICES_HOME/redpanda/redpanda-stack-compose.yml -p redpanda-stack down"
+# ------------- REDPANDA ------------- #
+alias  REDPANDA_STACK_UP="docker compose -f $SERVICES_HOME/redpanda/redpanda-stack-compose.yml -p redpanda-stack up --detach --remove-orphans"
+alias  REDPANDA_STACK_STOP="docker compose -f $SERVICES_HOME/redpanda/redpanda-stack-compose.yml -p redpanda-stack stop"
+alias  REDPANDA_STACK_DOWN="docker compose -f $SERVICES_HOME/redpanda/redpanda-stack-compose.yml -p redpanda-stack down"
 
-# ============================================
-# SONARQUBE
-# ============================================
-alias SONARQUBE_STACK_UP="docker compose -f $SERVICES_HOME/sonarqube/sonarqube-stack-compose.yml -p sonarqube-stack up --detach --remove-orphans"
-alias SONARQUBE_STACK_STOP="docker compose -f $SERVICES_HOME/sonarqube/sonarqube-stack-compose.yml -p sonarqube-stack stop"
-alias SONARQUBE_STACK_DOWN="docker compose -f $SERVICES_HOME/sonarqube/sonarqube-stack-compose.yml -p sonarqube-stack down"
+# ------------- SONARQUBE ------------- #
+alias  SONARQUBE_STACK_UP="docker compose -f $SERVICES_HOME/sonarqube/sonarqube-stack-compose.yml -p sonarqube-stack up --detach --remove-orphans"
+alias  SONARQUBE_STACK_STOP="docker compose -f $SERVICES_HOME/sonarqube/sonarqube-stack-compose.yml -p sonarqube-stack stop"
+alias  SONARQUBE_STACK_DOWN="docker compose -f $SERVICES_HOME/sonarqube/sonarqube-stack-compose.yml -p sonarqube-stack down"
+export SONARQUBE_JDBC_USERNAME="sonar"
+export SONARQUBE_JDBC_PASSWORD=""  # Set your password
+export SONARQUBE_JDBC_DATABASE="sonar"
 
-# ============================================
-# SQL SERVER 2022
-# ============================================
-alias SQLSERVER_STACK_UP="docker compose -f $SERVICES_HOME/sql-server-2022/sql-server-2022-stack-compose.yml -p sql-server-2022-stack up --detach --remove-orphans"
-alias SQLSERVER_STACK_STOP="docker compose -f $SERVICES_HOME/sql-server-2022/sql-server-2022-stack-compose.yml -p sql-server-2022-stack stop"
-alias SQLSERVER_STACK_DOWN="docker compose -f $SERVICES_HOME/sql-server-2022/sql-server-2022-stack-compose.yml -p sql-server-2022-stack down"
+# ------------- SQLSERVER 2022 ------------- #
+alias  SQLSERVER_STACK_UP="docker compose -f $SERVICES_HOME/sql-server-2022/sql-server-2022-stack-compose.yml -p sql-server-2022-stack up --detach --remove-orphans"
+alias  SQLSERVER_STACK_STOP="docker compose -f $SERVICES_HOME/sql-server-2022/sql-server-2022-stack-compose.yml -p sql-server-2022-stack stop"
+alias  SQLSERVER_STACK_DOWN="docker compose -f $SERVICES_HOME/sql-server-2022/sql-server-2022-stack-compose.yml -p sql-server-2022-stack down"
 export SQLSERVER_SA_PASSWORD=""  # Set your password (must meet SQL Server complexity requirements)
 export SQLSERVER_VOLUME_DIR="$SERVICES_HOME/sql-server-2022/volume"
 
-# ============================================
-# TELEMETRY (OpenTelemetry + Jaeger + Prometheus)
-# ============================================
-alias TELEMETRY_STACK_UP="docker compose -f $SERVICES_HOME/telemetry/telemetry-stack-compose.yml -p telemetry-stack up --detach --remove-orphans"
-alias TELEMETRY_STACK_STOP="docker compose -f $SERVICES_HOME/telemetry/telemetry-stack-compose.yml -p telemetry-stack stop"
-alias TELEMETRY_STACK_DOWN="docker compose -f $SERVICES_HOME/telemetry/telemetry-stack-compose.yml -p telemetry-stack down"
+# ------------- TELEMETRY ------------- #
+alias  TELEMETRY_STACK_UP="docker compose -f $SERVICES_HOME/telemetry/telemetry-stack-compose.yml -p telemetry-stack up --detach --remove-orphans"
+alias  TELEMETRY_STACK_STOP="docker compose -f $SERVICES_HOME/telemetry/telemetry-stack-compose.yml -p telemetry-stack stop"
+alias  TELEMETRY_STACK_DOWN="docker compose -f $SERVICES_HOME/telemetry/telemetry-stack-compose.yml -p telemetry-stack down"
 export TELEMETRY_VOLUME_DIR="$SERVICES_HOME/telemetry"
 
-# ============================================
-# TEMPORAL
-# ============================================
-alias TEMPORAL_STACK_UP="docker compose -f $SERVICES_HOME/temporal/temporal-dev-stack-compose.yml -p temporal-dev-stack up --detach --remove-orphans"
-alias TEMPORAL_STACK_STOP="docker compose -f $SERVICES_HOME/temporal/temporal-dev-stack-compose.yml -p temporal-dev-stack stop"
-alias TEMPORAL_STACK_DOWN="docker compose -f $SERVICES_HOME/temporal/temporal-dev-stack-compose.yml -p temporal-dev-stack down"
+# ------------- TEMPORAL ------------- #
+alias  TEMPORAL_STACK_UP="docker compose -f $SERVICES_HOME/temporal/temporal-dev-stack-compose.yml -p temporal-dev-stack up --detach --remove-orphans"
+alias  TEMPORAL_STACK_STOP="docker compose -f $SERVICES_HOME/temporal/temporal-dev-stack-compose.yml -p temporal-dev-stack stop"
+alias  TEMPORAL_STACK_DOWN="docker compose -f $SERVICES_HOME/temporal/temporal-dev-stack-compose.yml -p temporal-dev-stack down"
 export TEMPORAL_VOLUME_DIR="$SERVICES_HOME/temporal/volume"
 
-# ============================================
-# YUMBRANDS (Full stack for Yum! project)
-# ============================================
-alias YUMBRANDS_STACK_UP="docker compose -f $SERVICES_HOME/yumbrands/yumbrands-stack-compose.yml -p yumbrands-stack up --detach --remove-orphans"
-alias YUMBRANDS_STACK_STOP="docker compose -f $SERVICES_HOME/yumbrands/yumbrands-stack-compose.yml -p yumbrands-stack stop"
-alias YUMBRANDS_STACK_DOWN="docker compose -f $SERVICES_HOME/yumbrands/yumbrands-stack-compose.yml -p yumbrands-stack down"
+# ------------- YUMBRANDS ------------- #
+alias  YUMBRANDS_STACK_UP="docker compose -f $SERVICES_HOME/yumbrands/yumbrands-stack-compose.yml -p yumbrands-stack up --detach --remove-orphans"
+alias  YUMBRANDS_STACK_STOP="docker compose -f $SERVICES_HOME/yumbrands/yumbrands-stack-compose.yml -p yumbrands-stack stop"
+alias  YUMBRANDS_STACK_DOWN="docker compose -f $SERVICES_HOME/yumbrands/yumbrands-stack-compose.yml -p yumbrands-stack down"

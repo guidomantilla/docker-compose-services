@@ -11,7 +11,6 @@ services:
     volumes:
       - "${ORACLE_VOLUME_DIR}/oradata:/opt/oracle/oradata"
       - "${ORACLE_VOLUME_DIR}/oraInventory:/opt/oracle/oraInventory"
-      #- "${ORACLE_VOLUME_DIR}/product:/opt/oracle/product"
       - "${ORACLE_VOLUME_DIR}/diag:/opt/oracle/diag"
       - "${ORACLE_VOLUME_DIR}/audit:/opt/oracle/audit"
       - "${ORACLE_VOLUME_DIR}/admin:/opt/oracle/admin"
@@ -22,6 +21,6 @@ services:
       - oracle-23ai-network
 
 networks:
-   oracle-23ai-network:
-    name:  oracle-23ai-network
+  oracle-23ai-network:
+    name: oracle-23ai-network
     driver: bridge

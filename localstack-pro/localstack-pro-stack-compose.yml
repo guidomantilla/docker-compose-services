@@ -3,7 +3,7 @@ services:
     container_name: localstack-pro-server
     image: localstack/localstack-pro:latest  # required for Pro
     platform: linux/arm64
-    restart: no
+    restart: unless-stopped
     ports:
       - "127.0.0.1:4566:4566"            # LocalStack Gateway
       - "127.0.0.1:4510-4559:4510-4559"  # external services port range
@@ -18,9 +18,9 @@ services:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
-      -  localstack-pro-network
+      - localstack-pro-network
 
 networks:
-   localstack-pro-network:
+  localstack-pro-network:
     name: localstack-pro-network
     driver: bridge

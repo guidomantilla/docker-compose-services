@@ -28,7 +28,7 @@ services:
       - "16686:16686"  # UI
       - "14250:14250"  # gRPC (collector -> jaeger)
     environment:
-      - COLLECTOR_OTLP_ENABLED=true
+      COLLECTOR_OTLP_ENABLED: "true"
     volumes:
       - telemetry-jaeger_temp:/tmp
     networks:

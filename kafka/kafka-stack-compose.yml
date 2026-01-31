@@ -50,7 +50,7 @@ services:
     networks:
       - kafka-network
 
-  kafka-ui:
+  kafka-webui:
     container_name: kafka-webui
     image: provectuslabs/kafka-ui:latest
     platform: linux/arm64

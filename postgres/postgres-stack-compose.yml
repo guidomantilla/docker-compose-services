@@ -10,9 +10,9 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - "${POSTGRES_VOLUME_DIR}/data:/var/lib/postgresql/data"
-      - "./init/extension.sql:/docker-entrypoint-initdb.d/extension.sql"
+      - "${POSTGRES_HOME}/extension.sql:/docker-entrypoint-initdb.d/extension.sql"
     networks:
-      -  postgres-network
+      - postgres-network
 
 networks:
   postgres-network:
