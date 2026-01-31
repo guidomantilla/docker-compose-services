@@ -35,7 +35,7 @@
 | 13 | `redpanda/` | `redpanda-stack-compose.yml` | Multi-service | redpanda-broker, redpanda-console |
 | 14 | `sonarqube/` | `sonarqube-stack-compose.yml` | Multi-service | sonarqube-server, sonarqube-postgres |
 | 15 | `sql-server-2022/` | `sql-server-2022-stack-compose.yml` | Single | sqlserver-2022-server |
-| 16 | `telemetry/` | `telemetry-stack-compose.yml` | Multi-service | telemetry-otel-collector, telemetry-jaeger, telemetry-prometheus |
+| 16 | `telemetry/` | `telemetry-stack-compose.yml` | Multi-service | telemetry-otel-collector, telemetry-jaeger, telemetry-prometheus, telemetry-loki, telemetry-grafana, telemetry-alloy |
 | 17 | `temporal/` | `temporal-dev-stack-compose.yml` | Single | temporal-dev-server |
 | 18 | `yumbrands/` | `yumbrands-stack-compose.yml` | Multi-service | 11 services (postgres, kafka, temporal, etc.) |
 
@@ -379,15 +379,20 @@ Extras:         None
 
 ```
 File:           telemetry/telemetry-stack-compose.yml
-Services:       telemetry-otel-collector, telemetry-jaeger, telemetry-prometheus
+Services:       telemetry-otel-collector, telemetry-jaeger, telemetry-prometheus,
+                telemetry-loki, telemetry-grafana, telemetry-alloy
 Platform:       linux/arm64
-Restart:        unless-stopped
-Env handling:   Map format (jaeger: COLLECTOR_OTLP_ENABLED, otel/prometheus: no env)
+Restart:        unless-stopped (alloy: no — secondary collector, manual start)
+Env handling:   Map format (jaeger: COLLECTOR_OTLP_ENABLED, grafana: anonymous auth)
 Volumes:        Mixed: env var bind mounts (configs) + named volumes (temp/data)
-Ports:          "1888:1888", "8888:8888", "8889:8889", "13133:13133", "4317:4317", "4318:4318", "55679:55679", "16686:16686", "14250:14250", "9090:9090"
+Ports:          "1888:1888", "8888:8888", "8889:8889", "13133:13133", "4317:4317",
+                "4318:4318", "55679:55679", "16686:16686", "14250:14250", "9090:9090",
+                "3100:3100", "3000:3000", "12345:12345", "14317:4317", "14318:4318"
 depends_on:     None (services are independent)
 Healthcheck:    No
-Extras:         Inline port comments (e.g. # pprof extension)
+Extras:         OTEL Collector exports logs to Loki via otlphttp.
+                Grafana auto-provisions datasources (Loki, Prometheus, Jaeger).
+                Alloy is a secondary collector (restart: no) on remapped ports.
 ```
 
 ### 4.17 temporal
@@ -509,6 +514,7 @@ networks:
 | Named volumes | `{stack}-{service}_{purpose}` | `kafka-broker_data` |
 | `.envrc` vars | `{STACK}_VARIABLE` | `POSTGRES_PASSWORD`, `MONGO_VOLUME_DIR` |
 | `.envrc` aliases | `{STACK}_STACK_UP/STOP/DOWN` | `KAFKA_STACK_UP`, `MONGO_STACK_DOWN` |
+| `README.md` | Required for **multi-service** stacks | `telemetry/README.md`, `kafka/README.md` |
 
 #### YAML Key Order (per service)
 
@@ -563,6 +569,12 @@ networks:
 - No trailing spaces.
 - No extra spaces in YAML values or references.
 - Blank line between services, between top-level blocks (`services`, `volumes`, `networks`).
+
+#### Documentation
+
+- **Multi-service stacks** must include a `README.md` in the stack directory.
+- Content: table of services (ports, restart policy, function), dependency diagram, port listing, and relevant notes.
+- Single-service stacks do not require a `README.md` (the compose file is self-documenting).
 
 ### 5.4 `.envrc` Section Template
 

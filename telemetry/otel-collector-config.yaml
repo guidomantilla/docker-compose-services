@@ -31,6 +31,8 @@ exporters:
   file/logs:
       path: /otel-data/logs.jsonl
 
+  otlphttp/loki:
+    endpoint: http://telemetry-loki:3100/otlp
 
 service:
   telemetry:
@@ -57,4 +59,4 @@ service:
     logs:
       receivers: [otlp]
       processors: []
-      exporters: [debug, file/logs]
+      exporters: [debug, file/logs, otlphttp/loki]
