@@ -5,7 +5,7 @@ services:
     platform: linux/arm64
     restart: no
     ports:
-      - "9000:9000"
+      - "9200:9000"
     depends_on:
       - sonarqube-postgres
     environment:

@@ -1,0 +1,22 @@
+services:
+  pinot-server:
+    container_name: pinot-server
+    image: apachepinot/pinot:latest
+    platform: linux/arm64
+    restart: no
+    ports:
+      - "9100:9000"
+      - "8000:8000"
+    environment:
+      JAVA_OPTS: "-Xms1G -Xmx2G -Dpinot.admin.system.exit=false"
+    command: QuickStart -type EMPTY
+    volumes:
+      - "${PINOT_VOLUME_DIR:-./volume}/data:/opt/pinot/data"
+      - "${PINOT_VOLUME_DIR:-./volume}/configs:/opt/pinot/configs"
+    networks:
+      - pinot-network
+
+networks:
+  pinot-network:
+    name: pinot-network
+    driver: bridge

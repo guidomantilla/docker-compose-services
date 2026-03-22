@@ -45,3 +45,4 @@ telemetry/otel-data/*
 # ===========================================
 _deprecated/porchpass/
 _deprecated/yumbrands/
+supabase/

@@ -1,0 +1,21 @@
+services:
+  neo4j-server:
+    container_name: neo4j-server
+    image: neo4j:latest
+    platform: linux/arm64
+    restart: no
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: "${NEO4J_USER}/${NEO4J_PASSWORD}"
+    volumes:
+      - "${NEO4J_VOLUME_DIR:-./volume}/data:/data"
+      - "${NEO4J_VOLUME_DIR:-./volume}/logs:/logs"
+    networks:
+      - neo4j-network
+
+networks:
+  neo4j-network:
+    name: neo4j-network
+    driver: bridge

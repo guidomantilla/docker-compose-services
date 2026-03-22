@@ -6,6 +6,26 @@ export AWS_SECRET_ACCESS_KEY="test"
 export AWS_DEFAULT_REGION="us-east-1"
 export PAT=""
 
+# ------------- AIRFLOW ------------- #
+alias  AIRFLOW_STACK_UP="docker compose -f $SERVICES_HOME/airflow/airflow-stack-compose.yml -p airflow-stack up --detach --remove-orphans"
+alias  AIRFLOW_STACK_STOP="docker compose -f $SERVICES_HOME/airflow/airflow-stack-compose.yml -p airflow-stack stop"
+alias  AIRFLOW_STACK_DOWN="docker compose -f $SERVICES_HOME/airflow/airflow-stack-compose.yml -p airflow-stack down"
+export AIRFLOW_HOME="$SERVICES_HOME/airflow"
+export AIRFLOW_VOLUME_DIR="$AIRFLOW_HOME/volume"
+
+# ------------- CLICKHOUSE ------------- #
+alias  CLICKHOUSE_STACK_UP="docker compose -f $SERVICES_HOME/clickhouse/clickhouse-stack-compose.yml -p clickhouse-stack up --detach --remove-orphans"
+alias  CLICKHOUSE_STACK_STOP="docker compose -f $SERVICES_HOME/clickhouse/clickhouse-stack-compose.yml -p clickhouse-stack stop"
+alias  CLICKHOUSE_STACK_DOWN="docker compose -f $SERVICES_HOME/clickhouse/clickhouse-stack-compose.yml -p clickhouse-stack down"
+export CLICKHOUSE_PASSWORD=""  # Set your password
+export CLICKHOUSE_VOLUME_DIR="$SERVICES_HOME/clickhouse/volume"
+
+# ------------- GCP PUBSUB ------------- #
+alias  GCP_PUBSUB_STACK_UP="docker compose -f $SERVICES_HOME/gcp-pubsub/gcp-pubsub-stack-compose.yml -p gcp-pubsub-stack up --detach --remove-orphans"
+alias  GCP_PUBSUB_STACK_STOP="docker compose -f $SERVICES_HOME/gcp-pubsub/gcp-pubsub-stack-compose.yml -p gcp-pubsub-stack stop"
+alias  GCP_PUBSUB_STACK_DOWN="docker compose -f $SERVICES_HOME/gcp-pubsub/gcp-pubsub-stack-compose.yml -p gcp-pubsub-stack down"
+export PUBSUB_EMULATOR_HOST="localhost:8085"
+
 # ------------- KEYCLOAK ------------- #
 alias  KEYCLOAK_STACK_UP="docker compose -f $SERVICES_HOME/keycloak/keycloak-stack-compose.yml -p keycloak-stack up --detach --remove-orphans"
 alias  KEYCLOAK_STACK_STOP="docker compose -f $SERVICES_HOME/keycloak/keycloak-stack-compose.yml -p keycloak-stack stop"
@@ -27,6 +47,12 @@ alias  MAILHOG_STACK_UP="docker compose -f $SERVICES_HOME/mailhog/mailhog-stack-
 alias  MAILHOG_STACK_STOP="docker compose -f $SERVICES_HOME/mailhog/mailhog-stack-compose.yml -p mailhog-stack stop"
 alias  MAILHOG_STACK_DOWN="docker compose -f $SERVICES_HOME/mailhog/mailhog-stack-compose.yml -p mailhog-stack down"
 
+# ------------- METABASE ------------- #
+alias  METABASE_STACK_UP="docker compose -f $SERVICES_HOME/metabase/metabase-stack-compose.yml -p metabase-stack up --detach --remove-orphans"
+alias  METABASE_STACK_STOP="docker compose -f $SERVICES_HOME/metabase/metabase-stack-compose.yml -p metabase-stack stop"
+alias  METABASE_STACK_DOWN="docker compose -f $SERVICES_HOME/metabase/metabase-stack-compose.yml -p metabase-stack down"
+export METABASE_VOLUME_DIR="$SERVICES_HOME/metabase/volume"
+
 # ------------- MONGO ------------- #
 alias  MONGO_STACK_UP="docker compose -f $SERVICES_HOME/mongo/mongo-stack-compose.yml -p mongo-stack up --detach --remove-orphans"
 alias  MONGO_STACK_STOP="docker compose -f $SERVICES_HOME/mongo/mongo-stack-compose.yml -p mongo-stack stop"
@@ -44,6 +70,14 @@ export N8N_BASIC_AUTH_PASSWORD=""  # Set your password
 export N8N_ENCRYPTION_KEY=""  # Set your encryption key
 export N8N_VOLUME_DIR="$SERVICES_HOME/n8n/volume"
 
+# ------------- NEO4J ------------- #
+alias  NEO4J_STACK_UP="docker compose -f $SERVICES_HOME/neo4j/neo4j-stack-compose.yml -p neo4j-stack up --detach --remove-orphans"
+alias  NEO4J_STACK_STOP="docker compose -f $SERVICES_HOME/neo4j/neo4j-stack-compose.yml -p neo4j-stack stop"
+alias  NEO4J_STACK_DOWN="docker compose -f $SERVICES_HOME/neo4j/neo4j-stack-compose.yml -p neo4j-stack down"
+export NEO4J_USER="neo4j"
+export NEO4J_PASSWORD=""  # Set your password
+export NEO4J_VOLUME_DIR="$SERVICES_HOME/neo4j/volume"
+
 # ------------- OPENFGA ------------- #
 alias  OPENFGA_STACK_UP="docker compose -f $SERVICES_HOME/openfga/openfga-stack-compose.yml -p openfga-stack up --detach --remove-orphans"
 alias  OPENFGA_STACK_STOP="docker compose -f $SERVICES_HOME/openfga/openfga-stack-compose.yml -p openfga-stack stop"
@@ -56,6 +90,12 @@ alias  ORACLE_STACK_STOP="docker compose -f $SERVICES_HOME/oracle-23ai/oracle-23
 alias  ORACLE_STACK_DOWN="docker compose -f $SERVICES_HOME/oracle-23ai/oracle-23ai-stack-compose.yml -p oracle-23ai-stack down"
 export ORACLE_SYSTEM_PASSWORD=""  # Set your password
 export ORACLE_VOLUME_DIR="$SERVICES_HOME/oracle-23ai/volume"
+
+# ------------- PINOT ------------- #
+alias  PINOT_STACK_UP="docker compose -f $SERVICES_HOME/pinot/pinot-stack-compose.yml -p pinot-stack up --detach --remove-orphans"
+alias  PINOT_STACK_STOP="docker compose -f $SERVICES_HOME/pinot/pinot-stack-compose.yml -p pinot-stack stop"
+alias  PINOT_STACK_DOWN="docker compose -f $SERVICES_HOME/pinot/pinot-stack-compose.yml -p pinot-stack down"
+export PINOT_VOLUME_DIR="$SERVICES_HOME/pinot/volume"
 
 # ------------- POSTGRES ------------- #
 alias  POSTGRES_STACK_UP="docker compose -f $SERVICES_HOME/postgres/postgres-stack-compose.yml -p postgres-stack up --detach --remove-orphans"
@@ -101,16 +141,20 @@ alias  SQLSERVER_STACK_DOWN="docker compose -f $SERVICES_HOME/sql-server-2022/sq
 export SQLSERVER_SA_PASSWORD=""  # Set your password (must meet SQL Server complexity requirements)
 export SQLSERVER_VOLUME_DIR="$SERVICES_HOME/sql-server-2022/volume"
 
-# ------------- TIMESCALEDB ------------- #
-alias  TIMESCALEDB_STACK_UP="docker compose -f $SERVICES_HOME/timescaledb/timescaledb-stack-compose.yml -p timescaledb-stack up --detach --remove-orphans"
-alias  TIMESCALEDB_STACK_STOP="docker compose -f $SERVICES_HOME/timescaledb/timescaledb-stack-compose.yml -p timescaledb-stack stop"
-alias  TIMESCALEDB_STACK_DOWN="docker compose -f $SERVICES_HOME/timescaledb/timescaledb-stack-compose.yml -p timescaledb-stack down"
-export TIMESCALEDB_PASSWORD=""  # Set your password
-export TIMESCALEDB_HOME="$SERVICES_HOME/timescaledb"
-export TIMESCALEDB_VOLUME_DIR="$TIMESCALEDB_HOME/volume"
+# ------------- SUPABASE ------------- #
+alias  SUPABASE_STACK_UP="docker compose -f $SERVICES_HOME/supabase/docker-compose.yml -p supabase-stack up --detach --remove-orphans"
+alias  SUPABASE_STACK_STOP="docker compose -f $SERVICES_HOME/supabase/docker-compose.yml -p supabase-stack stop"
+alias  SUPABASE_STACK_DOWN="docker compose -f $SERVICES_HOME/supabase/docker-compose.yml -p supabase-stack down"
+
+# ------------- SUPERSET ------------- #
+alias  SUPERSET_STACK_UP="docker compose -f $SERVICES_HOME/superset/superset-stack-compose.yml -p superset-stack up --detach --remove-orphans"
+alias  SUPERSET_STACK_STOP="docker compose -f $SERVICES_HOME/superset/superset-stack-compose.yml -p superset-stack stop"
+alias  SUPERSET_STACK_DOWN="docker compose -f $SERVICES_HOME/superset/superset-stack-compose.yml -p superset-stack down"
+export SUPERSET_SECRET_KEY=""  # Set your secret key
+export SUPERSET_VOLUME_DIR="$SERVICES_HOME/superset/volume"
 
 # ------------- TELEMETRY ------------- #
-alias  TELEMETRY_STACK_UP="docker compose -f $SERVICES_HOME/telemetry/telemetry-stack-compose.yml -p telemetry-stack up --detach --remove-orphans"
+alias  TELEMETRY_STACK_UP="docker compose -f $SERVICES_HOME/telemetry/telemetry-stack-compose.yml -p telemetry-stack up --detach --remove-orphans telemetry-otel-collector telemetry-jaeger"
 alias  TELEMETRY_STACK_STOP="docker compose -f $SERVICES_HOME/telemetry/telemetry-stack-compose.yml -p telemetry-stack stop"
 alias  TELEMETRY_STACK_DOWN="docker compose -f $SERVICES_HOME/telemetry/telemetry-stack-compose.yml -p telemetry-stack down"
 export TELEMETRY_VOLUME_DIR="$SERVICES_HOME/telemetry"
@@ -121,6 +165,14 @@ alias  TEMPORAL_STACK_STOP="docker compose -f $SERVICES_HOME/temporal/temporal-d
 alias  TEMPORAL_STACK_DOWN="docker compose -f $SERVICES_HOME/temporal/temporal-dev-stack-compose.yml -p temporal-stack down"
 export TEMPORAL_VOLUME_DIR="$SERVICES_HOME/temporal/volume"
 
+# ------------- TIMESCALEDB ------------- #
+alias  TIMESCALEDB_STACK_UP="docker compose -f $SERVICES_HOME/timescaledb/timescaledb-stack-compose.yml -p timescaledb-stack up --detach --remove-orphans"
+alias  TIMESCALEDB_STACK_STOP="docker compose -f $SERVICES_HOME/timescaledb/timescaledb-stack-compose.yml -p timescaledb-stack stop"
+alias  TIMESCALEDB_STACK_DOWN="docker compose -f $SERVICES_HOME/timescaledb/timescaledb-stack-compose.yml -p timescaledb-stack down"
+export TIMESCALEDB_PASSWORD=""  # Set your password
+export TIMESCALEDB_HOME="$SERVICES_HOME/timescaledb"
+export TIMESCALEDB_VOLUME_DIR="$TIMESCALEDB_HOME/volume"
+
 # ------------- VERSITYGW ------------- #
 alias  VERSITYGW_STACK_UP="docker compose -f $SERVICES_HOME/versitygw/versitygw-stack-compose.yml -p versitygw-stack up --detach --remove-orphans"
 alias  VERSITYGW_STACK_STOP="docker compose -f $SERVICES_HOME/versitygw/versitygw-stack-compose.yml -p versitygw-stack stop"
@@ -128,3 +180,35 @@ alias  VERSITYGW_STACK_DOWN="docker compose -f $SERVICES_HOME/versitygw/versityg
 export VERSITYGW_ACCESS_KEY=""  # Set your access key
 export VERSITYGW_SECRET_KEY=""  # Set your secret key
 export VERSITYGW_VOLUME_DIR="$SERVICES_HOME/versitygw/volume"
+
+# ------------- SERVICES BULK ------------- #
+_SERVICES_UP_LIST=(
+  # AIRFLOW
+  # CLICKHOUSE
+  # GCP_PUBSUB
+  # KEYCLOAK
+  # LOCALSTACK
+  # MAILHOG
+  # METABASE
+  # MONGO
+  # N8N
+  # NEO4J
+  # OPENFGA
+  # ORACLE
+  # PINOT
+  # POSTGRES
+  # RABBITMQ
+  # REDIS
+  # REDPANDA
+  # SONARQUBE
+  # SQLSERVER
+  # SUPABASE
+  # SUPERSET
+  # TELEMETRY
+  # TEMPORAL
+  # TIMESCALEDB
+  # VERSITYGW
+)
+alias  services-up='for s in ${_SERVICES_UP_LIST[@]}; do eval "${s}_STACK_UP"; done'
+alias  services-stop='for s in ${_SERVICES_UP_LIST[@]}; do eval "${s}_STACK_STOP"; done'
+alias  services-down='for s in ${_SERVICES_UP_LIST[@]}; do eval "${s}_STACK_DOWN"; done'

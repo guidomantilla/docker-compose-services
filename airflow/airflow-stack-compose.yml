@@ -1,0 +1,21 @@
+services:
+  airflow-server:
+    container_name: airflow-server
+    image: apache/airflow:latest
+    platform: linux/arm64
+    restart: no
+    ports:
+      - "8380:8080"
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    command: standalone
+    volumes:
+      - "${AIRFLOW_VOLUME_DIR:-./volume}:/opt/airflow"
+      - "${AIRFLOW_HOME:-.}/dags:/opt/airflow/dags"
+    networks:
+      - airflow-network
+
+networks:
+  airflow-network:
+    name: airflow-network
+    driver: bridge
