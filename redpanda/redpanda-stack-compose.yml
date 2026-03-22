@@ -1,7 +1,7 @@
 services:
   redpanda-broker:
     container_name: redpanda-broker
-    image: docker.redpanda.com/redpandadata/redpanda:latest
+    image: docker.redpanda.com/redpandadata/redpanda:v25.3.4
     platform: linux/arm64
     restart: unless-stopped
     ports:
@@ -29,7 +29,7 @@ services:
 
   redpanda-console:
     container_name: redpanda-console
-    image: docker.redpanda.com/redpandadata/console:latest
+    image: docker.redpanda.com/redpandadata/console:v3.3.2
     platform: linux/arm64
     restart: unless-stopped
     depends_on:

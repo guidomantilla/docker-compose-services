@@ -1,9 +1,9 @@
 services:
   versitygw-server:
     container_name: versitygw-server
-    image: versity/versitygw:latest
+    image: versity/versitygw:v1.3.1
     platform: linux/arm64
-    restart: unless-stopped
+    restart: no
     ports:
       - "7070:7070"
       - "7071:7071"

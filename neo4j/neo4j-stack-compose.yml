@@ -1,7 +1,7 @@
 services:
   neo4j-server:
     container_name: neo4j-server
-    image: neo4j:latest
+    image: neo4j:2026.02.3-community
     platform: linux/arm64
     restart: no
     ports:

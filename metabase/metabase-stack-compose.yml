@@ -1,7 +1,7 @@
 services:
   metabase-server:
     container_name: metabase-server
-    image: metabase/metabase:latest
+    image: metabase/metabase:v0.53.18
     platform: linux/arm64
     restart: no
     ports:

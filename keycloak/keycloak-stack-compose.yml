@@ -1,9 +1,9 @@
 services:
   keycloak-server:
     container_name: keycloak-server
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:26.5.2
     platform: linux/arm64
-    restart: unless-stopped
+    restart: no
     command: start-dev
     ports:
       - "8180:8080"

@@ -1,7 +1,7 @@
 services:
   localstack-pro-server:
     container_name: localstack-pro-server
-    image: localstack/localstack-pro:latest  # required for Pro
+    image: localstack/localstack-pro:4  # required for Pro
     platform: linux/arm64
     restart: no
     ports:

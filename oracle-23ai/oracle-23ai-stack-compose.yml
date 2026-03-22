@@ -1,7 +1,7 @@
 services:
   oracle-23ai-server:
     container_name: oracle-23ai-server
-    image: gvenzl/oracle-free:latest
+    image: gvenzl/oracle-free:23-slim
     platform: linux/arm64
     restart: no
     ports:

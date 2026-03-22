@@ -1,7 +1,7 @@
 services:
   pinot-server:
     container_name: pinot-server
-    image: apachepinot/pinot:latest
+    image: apachepinot/pinot:1.4.0
     platform: linux/arm64
     restart: no
     ports:

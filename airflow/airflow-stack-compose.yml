@@ -1,7 +1,7 @@
 services:
   airflow-server:
     container_name: airflow-server
-    image: apache/airflow:latest
+    image: apache/airflow:3.1.8
     platform: linux/arm64
     restart: no
     ports:

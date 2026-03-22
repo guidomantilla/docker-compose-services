@@ -1,7 +1,7 @@
 services:
   postgres-server:
     container_name: postgres-server
-    image: postgres:latest
+    image: postgres:18
     platform: linux/arm64
     restart: no
     ports:

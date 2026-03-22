@@ -1,7 +1,7 @@
 services:
   n8n-server:
     container_name: n8n-server
-    image: n8nio/n8n:latest
+    image: n8nio/n8n:2.4.8
     platform: linux/arm64
     restart: no
     ports:

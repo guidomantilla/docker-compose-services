@@ -3,7 +3,7 @@ services:
     container_name: temporal-dev-server
     image: temporalio/temporal:latest
     platform: linux/arm64
-    restart: unless-stopped
+    restart: no
     ports:
       - "7233:7233"
       - "8233:8233"

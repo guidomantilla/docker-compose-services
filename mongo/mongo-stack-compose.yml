@@ -1,7 +1,7 @@
 services:
   mongo-server:
     container_name: mongo-server
-    image: mongo:latest
+    image: mongo:8.2.3
     platform: linux/arm64
     restart: no
     ports:

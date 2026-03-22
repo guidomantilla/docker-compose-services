@@ -1,7 +1,7 @@
 services:
   sonarqube-server:
     container_name: sonarqube-server
-    image: sonarqube:latest
+    image: sonarqube:community
     platform: linux/arm64
     restart: no
     ports:
@@ -22,7 +22,7 @@ services:
 
   sonarqube-postgres:
     container_name: sonarqube-postgres
-    image: postgres:latest
+    image: postgres:18
     platform: linux/arm64
     restart: no
     volumes:

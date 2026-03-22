@@ -1,7 +1,7 @@
 services:
   telemetry-otel-collector:
     container_name: telemetry-otel-collector
-    image: otel/opentelemetry-collector:latest
+    image: otel/opentelemetry-collector:0.142.0
     platform: linux/arm64
     restart: unless-stopped
     ports:
@@ -21,7 +21,7 @@ services:
 
   telemetry-jaeger:
     container_name: telemetry-jaeger
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one:1.76.0
     platform: linux/arm64
     restart: unless-stopped
     ports:
@@ -36,7 +36,7 @@ services:
 
   telemetry-prometheus:
     container_name: telemetry-prometheus
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.8.1
     platform: linux/arm64
     restart: unless-stopped
     ports:
@@ -49,7 +49,7 @@ services:
 
   telemetry-loki:
     container_name: telemetry-loki
-    image: grafana/loki:latest
+    image: grafana/loki:3.6.4
     platform: linux/arm64
     restart: unless-stopped
     ports:
@@ -63,7 +63,7 @@ services:
 
   telemetry-grafana:
     container_name: telemetry-grafana
-    image: grafana/grafana:latest
+    image: grafana/grafana:12.3.2
     platform: linux/arm64
     restart: unless-stopped
     ports:
@@ -80,7 +80,7 @@ services:
 
   telemetry-alloy:
     container_name: telemetry-alloy
-    image: grafana/alloy:latest
+    image: grafana/alloy:v1.12.2
     platform: linux/arm64
     restart: no
     ports:
