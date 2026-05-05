@@ -1,0 +1,17 @@
+services:
+  nginx-server:
+    container_name: nginx-server
+    image: nginx:1.27-alpine
+    platform: linux/arm64
+    restart: no
+    ports:
+      - "8090:80"
+    volumes:
+      - "${NGINX_HOME:-.}/html:/usr/share/nginx/html:ro"
+    networks:
+      - nginx-network
+
+networks:
+  nginx-network:
+    name: nginx-network
+    driver: bridge

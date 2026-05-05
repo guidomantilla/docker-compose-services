@@ -78,6 +78,12 @@ export NEO4J_USER="neo4j"
 export NEO4J_PASSWORD=""  # Set your password
 export NEO4J_VOLUME_DIR="$SERVICES_HOME/neo4j/volume"
 
+# ------------- NGINX ------------- #
+alias  NGINX_STACK_UP="docker compose -f $SERVICES_HOME/nginx/nginx-stack-compose.yml -p nginx-stack up --detach --remove-orphans"
+alias  NGINX_STACK_STOP="docker compose -f $SERVICES_HOME/nginx/nginx-stack-compose.yml -p nginx-stack stop"
+alias  NGINX_STACK_DOWN="docker compose -f $SERVICES_HOME/nginx/nginx-stack-compose.yml -p nginx-stack down"
+export NGINX_HOME="$SERVICES_HOME/nginx"
+
 # ------------- OPENFGA ------------- #
 alias  OPENFGA_STACK_UP="docker compose -f $SERVICES_HOME/openfga/openfga-stack-compose.yml -p openfga-stack up --detach --remove-orphans"
 alias  OPENFGA_STACK_STOP="docker compose -f $SERVICES_HOME/openfga/openfga-stack-compose.yml -p openfga-stack stop"
@@ -193,6 +199,7 @@ _SERVICES_UP_LIST=(
   # MONGO
   # N8N
   # NEO4J
+  # NGINX
   # OPENFGA
   # ORACLE
   # PINOT

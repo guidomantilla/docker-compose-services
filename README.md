@@ -1,10 +1,47 @@
 # Docker Compose Services
 
-> 25 service stacks for local development (updated 2026-03-22).
+A curated catalog of standardized Docker Compose stacks for local development. 26 service stacks, version-pinned, direnv-driven, opinionated by convention (updated 2026-05-05).
+
+## What this repo IS
+
+- A **standardized catalog** of `docker compose` stacks — same layout, naming, env-var conventions, and network topology across every service
+- **Version-pinned by default** — every image tagged to a specific version; a fresh `docker pull` cannot silently upgrade and break a stack
+- **Direnv-driven** — `.envrc` exposes per-stack aliases (`*_STACK_UP / STOP / DOWN`) so any service is one shell word away
+- **Composable** — `services-up` bulk alias drives the always-on subset (redis, redpanda, telemetry, timescaledb); the rest start on demand
+- **Apple-Silicon first** — defaults to `linux/arm64`, with `linux/amd64` exceptions only where ARM64 isn't published
+- **Self-contained per stack** — each folder is a single `docker compose -f` invocation with its own bridge network and volume conventions
+- **AI-readable** — predictable file naming, fixed YAML key order, and one section per stack in `.envrc` let coding assistants navigate any stack with no prior context
+
+## What this repo is NOT
+
+- **Not production-grade** — single-node, no replication, no backups, no secret manager, no resource limits
+- **Not a Kubernetes replacement** — for k8s-target apps use Tilt, Skaffold, or Garden
+- **Not a Testcontainers substitute** — those are programmatic and per-test ephemeral; this is shared infra you keep running across sessions
+- **Not a dev-container replacement** — devcontainers bundle into the IDE per project; this lives at the user level and serves multiple projects
+- **Not exhaustive** — covers what the author actually uses (postgres, kafka-equivalent, observability, identity, etc.), not every CNCF service
+- **Not auto-updating** — image bumps are intentional, tracked, and manual; pinning is a feature, not a limitation
+- **Not opinion-free** — port remappings, restart policies, network names, and `services-up` membership reflect explicit choices, not consensus
+- **Not platform-agnostic** — Apple Silicon is primary; `linux/amd64` works but receives less testing
+
+## How this compares to alternatives
+
+If you've used the tools below, this is how they relate. They are complementary — none replaces another.
+
+| Tool | What it is | When to use |
+|---|---|---|
+| Brew · MacPorts services | OS-installed daemons | One instance per machine, deep OS integration, no version isolation |
+| devcontainers | IDE-bound per-project env | Project-scoped, IDE-coupled (VS Code, JetBrains) |
+| Tilt · Skaffold · Garden | Kubernetes dev orchestration | App targets Kubernetes in production |
+| Testcontainers | Programmatic per-test containers | Test isolation, lifecycle managed by test runner |
+| **docker-compose-services** | Standalone catalog of shared local infra | Multi-project, terminal-driven, infra outlives any single project |
+
+This catalog does not compete with the above — it covers the gap when you want **infra that survives across projects** without being globally installed on the host.
 
 ---
 
-## 1. Active Stacks
+## Structure
+
+### Active Stacks (26)
 
 | # | Directory | Image | Ports | `restart:` |
 |---|-----------|-------|-------|------------|
@@ -19,28 +56,27 @@
 | 9 | `mongo/` | `mongo:8.2.3` | 27017 | no |
 | 10 | `n8n/` | `n8nio/n8n:2.4.8` | 5678 | no |
 | 11 | `neo4j/` | `neo4j:2026.02.3-community` | 7474, 7687 | no |
-| 12 | `openfga/` | `openfga/openfga:v1.11.3` | 8280, 8281, 3200 | no |
-| 13 | `oracle-23ai/` | `gvenzl/oracle-free:23-slim` | 1521 | no |
-| 14 | `pinot/` | `apachepinot/pinot:1.4.0` | 9100, 8000 | no |
-| 15 | `postgres/` | `postgres:18` | 15432 | no |
-| 16 | `rabbitmq/` | `rabbitmq:management` | 5672, 15672 | no |
-| 17 | `redis/` | `redis/redis-stack:7.4.0-v3` | 6379, 8001 | **unless-stopped** |
-| 18 | `redpanda/` | `redpandadata/redpanda:v25.3.4` + `console:v3.3.2` | 19092, 18081, 18082, 19644, 8080 | **unless-stopped** |
-| 19 | `sonarqube/` | `sonarqube:community` + `postgres:18` | 9200 | no |
-| 20 | `sql-server-2022/` | `mssql/server:2022-latest` | 1433 | no |
-| 21 | `superset/` | `apache/superset:latest` | 8088 | no |
-| 22 | `telemetry/` | otel-collector, jaeger, prometheus, loki, grafana, alloy | 4317, 4318, 8888, 9090, 3000, 3100, 16686, ... | **unless-stopped** |
-| 23 | `temporal/` | `temporalio/temporal:latest` | 7233, 8233 | no |
-| 24 | `timescaledb/` | `timescale/timescaledb-ha:pg17` | 5432 | **unless-stopped** |
-| 25 | `versitygw/` | `versity/versitygw:v1.3.1` | 7070, 7071 | no |
+| 12 | `nginx/` | `nginx:1.27-alpine` | 8090 | no |
+| 13 | `openfga/` | `openfga/openfga:v1.11.3` | 8280, 8281, 3200 | no |
+| 14 | `oracle-23ai/` | `gvenzl/oracle-free:23-slim` | 1521 | no |
+| 15 | `pinot/` | `apachepinot/pinot:1.4.0` | 9100, 8000 | no |
+| 16 | `postgres/` | `postgres:18` | 15432 | no |
+| 17 | `rabbitmq/` | `rabbitmq:management` | 5672, 15672 | no |
+| 18 | `redis/` | `redis/redis-stack:7.4.0-v3` | 6379, 8001 | **unless-stopped** |
+| 19 | `redpanda/` | `redpandadata/redpanda:v25.3.4` + `console:v3.3.2` | 19092, 18081, 18082, 19644, 8080 | **unless-stopped** |
+| 20 | `sonarqube/` | `sonarqube:community` + `postgres:18` | 9200 | no |
+| 21 | `sql-server-2022/` | `mssql/server:2022-latest` | 1433 | no |
+| 22 | `superset/` | `apache/superset:latest` | 8088 | no |
+| 23 | `telemetry/` | otel-collector, jaeger, prometheus, loki, grafana, alloy | 4317, 4318, 8888, 9090, 3000, 3100, 16686, ... | **unless-stopped** |
+| 24 | `temporal/` | `temporalio/temporal:latest` | 7233, 8233 | no |
+| 25 | `timescaledb/` | `timescale/timescaledb-ha:pg17` | 5432 | **unless-stopped** |
+| 26 | `versitygw/` | `versity/versitygw:v1.3.1` | 7070, 7071 | no |
 
-**Non-tracked:** `supabase/` (cloned from official repo, in `.gitignore`, for architecture reference only).
+**Non-tracked:** `supabase/` is cloned from the official repo into `supabase/`, gitignored, kept for architecture reference only (not a managed stack).
 
----
+### `services-up` subset (always-on)
 
-## 2. services-up
-
-Stacks with `restart: unless-stopped` auto-start with OrbStack and are included in the `services-up` alias:
+Stacks with `restart: unless-stopped` auto-start with OrbStack and are included in the `services-up` bulk alias:
 
 | Stack | Purpose | RAM |
 |-------|---------|-----|
@@ -49,13 +85,21 @@ Stacks with `restart: unless-stopped` auto-start with OrbStack and are included 
 | **telemetry** | Observability (otel-collector + jaeger only in services-up) | ~50 MB |
 | **timescaledb** | Primary PostgreSQL 17 + 50+ extensions | ~75 MB |
 
-All other stacks use `restart: no` and are started on demand via individual aliases (e.g., `CLICKHOUSE_STACK_UP`).
+Everything else uses `restart: no` and starts on demand via its individual alias (e.g. `CLICKHOUSE_STACK_UP`).
+
+### Deprecated and pending
+
+| Folder | Contents |
+|---|---|
+| `_deprecated/` | arangodb, cockroachdb, druid, elk, influxdb, kafka, metabase (old), minio, porchpass, scylladb, temporal (full), yumbrands |
+| `_pending/` | empty — all stacks have been promoted or deprecated |
+| `supabase/` | cloned official repo, 13 microservices, gitignored, reference only |
 
 ---
 
-## 3. Port Remapping
+## Port Remapping
 
-Most stacks use default ports. Remaps exist only where ports collide:
+Most stacks use default ports. Remaps exist only where ports collide. The convention is **+100 / +200 / +300 offsets from the owning service's default port**, so the remap origin is always readable.
 
 ### Port `8080` — redpanda-console owns it
 
@@ -89,9 +133,9 @@ Most stacks use default ports. Remaps exist only where ports collide:
 | timescaledb | 5432 | primary PostgreSQL |
 | postgres | 15432 | secondary, vanilla PostgreSQL |
 
-### Redpanda external ports (official defaults, NOT remaps)
+### Redpanda external listeners (official defaults, not remaps)
 
-`19092` (Kafka API), `18081` (Schema Registry), `18082` (Pandaproxy), `19644:9644` (Admin API) — these are Redpanda's official external listener ports per [docs.redpanda.com](https://docs.redpanda.com/redpanda-labs/docker-compose/single-broker/).
+`19092` (Kafka API) · `18081` (Schema Registry) · `18082` (Pandaproxy) · `19644:9644` (Admin API) — Redpanda's official external listener ports per [docs.redpanda.com](https://docs.redpanda.com/redpanda-labs/docker-compose/single-broker/).
 
 ### Intentional remaps
 
@@ -100,74 +144,99 @@ Most stacks use default ports. Remaps exist only where ports collide:
 | telemetry-alloy | 14317, 14318 | collides with otel-collector (same stack) |
 | localstack | 9443:443 | privileged port |
 | debezium-server | 8084:8080 | collides with redpanda-console |
+| nginx | 8090:80 | privileged port |
 
 ---
 
-## 4. Standards
+## How to Use This Repo
 
-### Image Tags
+### Initial setup
 
-- **Never use `:latest`**. Always pin to a specific version.
-- `:latest` is non-deterministic — a `docker pull` can silently upgrade and break your stack.
-- Exception: images that only publish `:latest` with no version tags (e.g., `apache/superset`, `temporalio/temporal`).
-
-### Compose File Naming
-
-`{service-name}-stack-compose.yml` — e.g., `postgres-stack-compose.yml`.
-
-### YAML Key Order (per service)
-
-```
-container_name → image → platform → restart → depends_on → ports → environment → command → working_dir → volumes → networks
+```bash
+git clone git@github.com:guidomantilla/docker-compose-services.git
+cd docker-compose-services
+cp .envrc.example .envrc        # then fill in passwords
+direnv allow                    # if using direnv
 ```
 
-### Environment Variables
+### Single-stack lifecycle
 
-- Credentials: from `.envrc` via `"${SHELL_VAR}"` — never hardcoded in YAML.
-- Service config (non-secret): hardcoded in YAML is acceptable.
-- Format: map format (`KEY: "value"`), never list format (`- KEY=value`).
+Each stack exposes three aliases via `.envrc`:
 
-### Volumes
+```bash
+POSTGRES_STACK_UP        # docker compose up --detach --remove-orphans
+POSTGRES_STACK_STOP      # docker compose stop
+POSTGRES_STACK_DOWN      # docker compose down
+```
 
-- Persistent data: `${STACK_VOLUME_DIR}/subpath:/container/path`.
-- Init/config files: `${STACK_HOME}/file:/container/path`.
-- Default fallback: `:-./volume` for development without `.envrc`.
-- Every `volume/` directory has a `.gitkeep`. Data inside is excluded via `.gitignore`.
+The pattern is `{STACK}_STACK_UP/STOP/DOWN` for every stack listed above.
 
-### Restart Policy
+### Bulk lifecycle (services-up subset)
 
-- `unless-stopped`: only for stacks in `services-up` (always running).
-- `no`: everything else (started on demand).
+```bash
+services-up              # iterates _SERVICES_UP_LIST
+services-stop
+services-down
+```
 
-### Platform
+`_SERVICES_UP_LIST` is defined at the bottom of `.envrc`; uncomment a stack name to include it in bulk operations.
 
-- Default: `linux/arm64` (Apple Silicon).
-- Exception: `linux/amd64` for images without ARM64 support (mailhog, sql-server, gcp-pubsub).
+### Quick connectivity check
 
-### Networks
+```bash
+./docker-show.sh         # lists running containers + their published ports
+```
 
-- Each stack has its own bridge network: `{stack}-network`.
-- Cross-network access only when a stack needs to communicate with another (e.g., debezium accesses redpanda-network and timescaledb-network).
+### Adding a new stack
 
-### `.envrc` Structure
-
-- Alphabetically ordered sections, one per stack.
-- Each section: aliases (`_STACK_UP/STOP/DOWN`) + env vars.
-- `_SERVICES_UP_LIST` at the bottom: array of stacks for bulk `services-up/stop/down`.
-- `.envrc.example`: same structure, passwords empty.
+1. Create `{stack}/` with `{stack}-stack-compose.yml` following the YAML key order standard
+2. Add a `volume/.gitkeep` if the stack mounts persistent data
+3. Add a section in `.envrc` and `.envrc.example` (alphabetical)
+4. Add a row to the `Active Stacks` table above (alphabetical, renumber as needed)
+5. If the host port collides with an existing remap group, use the next `+100` offset; otherwise document under `Intentional remaps`
 
 ---
 
-## 5. Deprecated & Pending
+## Design Decisions
 
-### `_deprecated/`
+| Decision | Rationale |
+|---|---|
+| **Pin every image version, never `:latest`** | `:latest` is non-deterministic — a `docker pull` can silently upgrade and break a stack. Exception: images that publish *only* `:latest` (apache/superset, temporalio/temporal). |
+| **Compose file naming `{service}-stack-compose.yml`** | Discoverable via filename alone; predictable for IDE search and CLI completion. |
+| **Fixed YAML key order per service** | `container_name → image → platform → restart → depends_on → ports → environment → command → working_dir → volumes → networks`. Mechanical to read, mechanical to diff. |
+| **Credentials only via `.envrc`** | Secrets out of YAML, out of git. `.envrc` is gitignored; `.envrc.example` ships with empty values. |
+| **Map-format env vars (`KEY: "value"`)** | Predictable interpolation. List format (`- KEY=value`) loses type clarity and resists templating. |
+| **Per-stack bridge network `{stack}-network`** | Isolation by default. Cross-network access is added explicitly when a stack needs to talk to another (e.g., debezium ↔ redpanda + timescaledb). |
+| **`unless-stopped` only for `services-up`** | Always-on subset auto-starts with OrbStack. Everything else is `restart: no` and runs on demand — keeps idle RAM low. |
+| **Default platform `linux/arm64`** | Apple Silicon is the primary target. `linux/amd64` is the exception, used only when ARM64 is not published (mailhog, sql-server, gcp-pubsub). |
+| **`.envrc` alphabetical, one section per stack** | Mechanical to extend — new stacks insert in their alphabetical slot, no merge conflicts on order. |
+| **Volumes split: `${STACK_VOLUME_DIR}` for data, `${STACK_HOME}` for init/config** | Data and configuration have different backup/lifecycle needs. Default fallback `:-./volume` lets the stack run without `.envrc`. |
+| **`.gitkeep` in every `volume/`** | Reserves the path in git; data inside is excluded via `.gitignore` glob. |
+| **Port remaps localized and documented** | Every remap has a written reason in this README. The `+100/+200/+300` offset convention makes the origin port readable. |
+| **No resource limits on stacks** | Development laptop on OrbStack — limits add friction without value. Revisit per-stack only if OrbStack overloads. |
+| **Multi-service stacks ship a per-stack `README.md`** | When a folder contains more than one service (kafka, openfga, redpanda, sonarqube, telemetry, yumbrands), the local README documents the relationship. |
 
-arangodb, cockroachdb, druid, elk, influxdb, kafka, metabase (old), minio, porchpass, scylladb, temporal (full), yumbrands.
+---
 
-### `_pending/`
+## References
 
-Empty. All stacks have been promoted or deprecated.
+### Tooling
+- [Docker Compose specification](https://docs.docker.com/compose/compose-file/)
+- [OrbStack](https://orbstack.dev/) — recommended Docker runtime on macOS
+- [direnv](https://direnv.net/) — per-directory env loading (drives `.envrc`)
 
-### `supabase/`
+### Per-stack canonical sources
+- [Redpanda single-broker compose](https://docs.redpanda.com/redpanda-labs/docker-compose/single-broker/)
+- [Apache Airflow Docker](https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html)
+- [Keycloak quickstart](https://www.keycloak.org/server/containers)
+- [TimescaleDB Docker](https://docs.timescale.com/self-hosted/latest/install/installation-docker/)
+- [OpenFGA Docker](https://openfga.dev/docs/getting-started/setup-openfga/docker)
+- Per-stack official documentation linked from each `{stack}/README.md`
 
-Cloned from official repo for architecture reference (13 microservices). Excluded from git via `.gitignore`. Not a managed stack.
+---
+
+## License
+
+Apache License 2.0 — see [LICENSE](LICENSE).
+
+Copyright 2026 Guido Mauricio Mantilla Tarazona (guidomau / usq0x6e.co). Bogotá, Colombia.
